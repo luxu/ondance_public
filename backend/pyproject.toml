@@ -1,0 +1,45 @@
+[project]
+name = "backend"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "dj-database-url>=3.1.2",
+    "django>=6.0.3",
+    "django-allauth>=65.15.0",
+    "django-cors-headers>=4.9.0",
+    "django-extensions>=4.1",
+    "djangorestframework>=3.17.0",
+    "pillow>=12.1.1",
+    "python-decouple>=3.8",
+]
+[dependency-groups]
+dev = [
+    "ipdb>=0.13.13",
+    "ruff>=0.14.8",
+    "pytest>=9.0.2",
+    "pytest-cov>=6.0.0",
+    "pytest-django>=4.11.1",
+    "requests>=2.32.5",
+    "taskipy>=1.14.1",
+]
+[tool.taskipy.tasks]
+startapp = "uv run python manage.py startapp"
+makemigrations = "uv run python manage.py makemigrations"
+migrate = "uv run python manage.py migrate"
+createsuperuser = "uv run python manage.py createsuperuser"
+runserver = "uv run python manage.py runserver"
+shell_plus = "uv run python manage.py shell_plus"
+showmigrations = "uv run python manage.py showmigrations"
+lint = 'ruff check'
+pre_format = 'ruff check --fix'
+format = 'ruff format'
+pre_test = 'task lint'
+test = 'pytest -s -x -vv'
+post_test = 'coverage html'
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "kernel.settings"
+python_files = ["test_*.py"]
+pythonpath = ["."]
+addopts = "--cov=user --cov=course --cov=api"
+[tool.coverage.report]
+include = ["*/test_*.py"]
