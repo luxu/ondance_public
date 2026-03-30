@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from user.models import User
+from course.models import Course
+from user.models import City, State, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -8,13 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id',
-            'name',
             'email',
-            'address',
-            'ein',
-            'cellphone',
-            'phone',
-            'password',
         ]
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -27,6 +22,32 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class StateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = State
+        fields = ['id', 'name', 'abbreviation']
+
+
+class CitySerializer(serializers.ModelSerializer):
+    state = serializers.SlugRelatedField(read_only=True, slug_field='abbreviation')
+
+    class Meta:
+        model = City
+        fields = ['id', 'name', 'state']
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    teacher = serializers.SlugRelatedField(
+        slug_field='email',
+        queryset=User.objects.all(),
+    )
+
+    class Meta:
+        model = Course
+        fields = ['id', 'title', 'teacher', 'is_published', 'status']
+        read_only_fields = ['id', 'is_published', 'status']
 
 
 # class ClientSerializer(serializers.ModelSerializer):
