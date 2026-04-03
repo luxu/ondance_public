@@ -1,4 +1,6 @@
 *.pyc
 backend/__pycache__/
 backend/.coverage
+backend/.claude/
 frontend/.claude/
+CLAUDE.md
