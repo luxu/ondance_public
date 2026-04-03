@@ -25,7 +25,7 @@
     <!-- Sidebar -->
     <AppSidebar
       :nav-sections="navSections"
-      settings-route="/curses/configuracoes"
+      settings-route="/courses/configuracoes"
     />
 
     <!-- Page -->
@@ -54,17 +54,17 @@ const navSections = [
   {
     label: null,
     items: [
-      { to: '/curses/initial',      icon: 'home',             label: 'Início' },
-      { to: '/curses/lista',        icon: 'list_alt',         label: 'Cursos' },
-      { to: '/curses/new',         icon: 'add_circle',       label: 'Novo Curso' },
-      { to: '/curses/categorias',   icon: 'category',         label: 'Categorias' },
+      { to: '/courses/initial',      icon: 'home',             label: 'Início' },
+      { to: '/courses/lista',        icon: 'list_alt',         label: 'Cursos' },
+      { to: '/courses/new',         icon: 'add_circle',       label: 'Novo Curso' },
+      { to: '/courses/categorias',   icon: 'category',         label: 'Categorias' },
     ]
   },
   {
     label: 'Gestão',
     items: [
-      { to: '/curses/alunos',       icon: 'group',            label: 'Alunos' },
-      { to: '/curses/configuracoes',icon: 'settings',         label: 'Configurações' }
+      { to: '/courses/students',       icon: 'group',            label: 'Students' },
+      { to: '/courses/configuracoes',icon: 'settings',         label: 'Configurações' }
     ]
   }
 ]

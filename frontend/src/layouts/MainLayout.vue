@@ -48,7 +48,7 @@ const linksList = [
   {
     title: 'Aluno',
     icon: 'person',
-    to: '/alunos'
+    to: '/students'
   },
   {
     title: 'Professor',
@@ -58,7 +58,12 @@ const linksList = [
   {
     title: 'Cursos',
     icon: 'book',
-    to: '/curses'
+    to: '/courses'
+  },
+  {
+    title: 'Cidades',
+    icon: 'city',
+    to: '/cities'
   },
 ]
 

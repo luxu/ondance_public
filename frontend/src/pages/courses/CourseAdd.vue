@@ -3,7 +3,7 @@
 
     <!-- Header -->
     <div class="row items-center q-mb-lg" style="gap: 12px;">
-      <q-btn flat round dense icon="arrow_back" :style="{ color: 'var(--od-text-2)' }" @click="$router.push('/curses/initial')" />
+      <q-btn flat round dense icon="arrow_back" :style="{ color: 'var(--od-text-2)' }" @click="$router.push('/courses/initial')" />
       <div>
         <div class="od-display" style="font-size: 22px; color: var(--od-text-1);">Novo Curso</div>
         <p style="color: var(--od-text-3); margin: 2px 0 0; font-size: 13px;">Preencha as informações e monte a estrutura do curso</p>
@@ -155,7 +155,7 @@
               flat no-caps
               label="Cancelar"
               style="color: var(--od-text-3);"
-              @click="$router.push('/curses/initial')"
+              @click="$router.push('/courses/initial')"
             />
             <q-btn
               unelevated no-caps

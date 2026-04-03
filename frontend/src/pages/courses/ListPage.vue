@@ -12,7 +12,7 @@
         icon="add"
         label="Novo Curso"
         style="background: var(--od-accent); color: #fff; border-radius: 8px; font-weight: 500;"
-        to="/curses/new"
+        to="/courses/new"
       />
     </div>
 
@@ -74,7 +74,7 @@
         flat bordered
         class="od-card"
         style="cursor: pointer;"
-        @click="$router.push(`/curses/editar/${course.id}`)"
+        @click="$router.push(`/courses/editar/${course.id}`)"
       >
         <q-card-section class="row items-center" style="gap: 16px; padding: 14px 16px;">
 
@@ -121,7 +121,7 @@
 
           <div :style="{ width: '1px', height: '32px', background: 'var(--od-border)' }" />
 
-          <!-- Alunos -->
+          <!-- Students -->
           <div class="column items-center" style="min-width: 60px; text-align: center;">
             <div style="font-size: 16px; font-weight: 600; color: var(--od-text-1);">{{ course.students }}</div>
             <div style="font-size: 11px; color: var(--od-text-4);">aluno{{ course.students !== 1 ? 's' : '' }}</div>
@@ -131,7 +131,7 @@
           <q-btn flat round dense icon="more_vert" :style="{ color: 'var(--od-text-4)' }" @click.stop>
             <q-menu anchor="bottom right" self="top right">
               <q-list style="min-width: 160px; font-size: 13px;">
-                <q-item clickable v-close-popup @click="$router.push(`/curses/editar/${course.id}`)">
+                <q-item clickable v-close-popup @click="$router.push(`/courses/editar/${course.id}`)">
                   <q-item-section avatar><q-icon name="edit" size="16px" /></q-item-section>
                   <q-item-section>Editar</q-item-section>
                 </q-item>

@@ -43,7 +43,7 @@ const navSections = [
       { to: '/professor/dashboard', icon: 'dashboard',    label: 'Dashboard' },
       { to: '/professor/cursos',    icon: 'video_library',label: 'Meus Cursos', badge: '5' },
       { to: '/professor/cursos/novo',icon: 'add_circle',  label: 'Criar Curso' },
-      { to: '/professor/alunos',    icon: 'group',        label: 'Alunos', badge: '42' }
+      { to: '/professor/students',    icon: 'group',        label: 'Students', badge: '42' }
     ]
   },
   {

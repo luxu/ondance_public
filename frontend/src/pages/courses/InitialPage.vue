@@ -12,7 +12,7 @@
         icon="add"
         label="Novo Curso"
         style="background: var(--od-accent); color: #fff; border-radius: 8px; font-weight: 500;"
-        to="/curses/new"
+        to="/courses/new"
       />
     </div>
 
@@ -28,7 +28,7 @@
       />
       <MetricCard
         class="col"
-        label="Alunos matriculados"
+        label="Students matriculados"
         value="348"
         change="↑ 41 esta semana"
         change-type="up"
@@ -78,7 +78,7 @@
               :key="course.id"
               class="row items-center q-py-sm"
               :style="{ borderBottom: '0.5px solid var(--od-border-light)', gap: '12px', cursor: 'pointer' }"
-              @click="$router.push(`/curses/editar/${course.id}`)"
+              @click="$router.push(`/courses/editar/${course.id}`)"
             >
               <div class="od-course-thumb" :style="{ background: course.thumbBg }">
                 {{ course.emoji }}
@@ -86,7 +86,7 @@
               <div style="flex: 1; min-width: 0;">
                 <div style="font-size: 13px; font-weight: 500;" :style="{ color: 'var(--od-text-1)' }">{{ course.name }}</div>
                 <div style="font-size: 11.5px; margin-top: 2px;" :style="{ color: 'var(--od-text-3)' }">
-                  {{ course.teacher }} · {{ course.lessons }} aulas · {{ course.students }} alunos
+                  {{ course.teacher }} · {{ course.lessons }} aulas · {{ course.students }} students
                 </div>
               </div>
               <q-badge
@@ -121,7 +121,7 @@
               label="✏  Continuar edição"
               class="full-width q-mt-md"
               style="background: rgba(255,255,255,0.2); color: #fff; border-radius: 8px; font-weight: 500;"
-              to="/curses/editar/4"
+              to="/courses/editar/4"
             />
           </q-card-section>
         </q-card>
