@@ -235,7 +235,7 @@ async function handleSubmit() {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: linear-gradient(180deg, #f5fbf9 0%, #ffffff 100%);
+  background: var(--od-bg-page);
 }
 
 .register-container {
@@ -251,19 +251,19 @@ async function handleSubmit() {
 .brand-title {
   font-size: 34px;
   font-weight: 700;
-  color: #2d9d8f;
+  color: var(--od-accent);
   margin-bottom: 8px;
 }
 
 .brand-subtitle {
-  color: #63777d;
+  color: var(--od-text-3);
   font-size: 15px;
   margin: 0;
 }
 
 .register-card {
-  background: white;
-  border: 1px solid rgba(77, 184, 168, 0.16);
+  background: var(--od-bg-surface);
+  border: 1px solid var(--od-border);
   border-radius: 28px;
   box-shadow: 0 24px 52px rgba(42, 81, 68, 0.06);
 }
@@ -296,35 +296,35 @@ async function handleSubmit() {
 }
 
 .register-input {
-  --q-color: #4db8a8;
+  --q-color: var(--od-accent);
 }
 
 :deep(.register-input .q-field__control) {
-  background: #f3fbf8;
+  background: var(--od-bg-subtle);
   border-radius: 16px;
 }
 
 :deep(.register-input .q-field__label) {
-  color: #4a7b77;
+  color: var(--od-text-3);
 }
 
 :deep(.register-input .q-field__native) {
-  color: #253d38;
+  color: var(--od-text-1);
 }
 
 .register-select-popup {
-  background: #ffffff !important;
-  border: 1px solid rgba(77, 184, 168, 0.18) !important;
+  background: var(--od-bg-surface) !important;
+  border: 1px solid var(--od-border) !important;
   box-shadow: 0 20px 40px rgba(42, 81, 68, 0.08) !important;
   border-radius: 18px !important;
 }
 
 .register-select-popup :deep(.q-item) {
-  color: #253d38;
+  color: var(--od-text-1);
 }
 
 .register-select-popup :deep(.q-item:hover) {
-  background: rgba(77, 184, 168, 0.12) !important;
+  background: var(--od-bg-hover) !important;
 }
 
 .register-error {

@@ -54,7 +54,8 @@ const navSections = [
   {
     label: null,
     items: [
-      { to: '/courses/initial',      icon: 'home',             label: 'Início' },
+      { to: '/',                  icon: 'home',             label: 'Página Inicial' },
+      { to: '/courses/initial',      icon: 'dashboard',        label: 'Início' },
       { to: '/courses/lista',        icon: 'list_alt',         label: 'Cursos' },
       { to: '/courses/new',         icon: 'add_circle',       label: 'Novo Curso' },
       { to: '/courses/categorias',   icon: 'category',         label: 'Categorias' },

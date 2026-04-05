@@ -16,7 +16,17 @@
         
         <!-- Spacer to push link to the right -->
         <div style="flex: 1;" />
-        
+
+        <q-btn
+          flat
+          round
+          dense
+          :icon="isDark ? 'light_mode' : 'dark_mode'"
+          :aria-label="isDark ? 'Modo claro' : 'Modo escuro'"
+          @click="toggleDark"
+          style="color: var(--od-text-1, #333); margin-right: 12px;"
+        />
+
         <!-- Cadastro Link -->
         <router-link
           to="/register"
@@ -64,8 +74,16 @@
 <script setup>
 import { ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
+import { useDarkMode } from 'src/composables/useDarkMode'
+
+const { isDark, toggle: toggleDark } = useDarkMode()
 
 const linksList = [
+  {
+    title: 'Início',
+    icon: 'home',
+    to: '/'
+  },
   {
     title: 'Aluno',
     icon: 'person',

@@ -1,7 +1,7 @@
 <template>
-  <q-page class="index-page">
+  <q-page class="index-page q-pa-none">
     <!-- Two Column Layout -->
-    <div class="row no-wrap full-height">
+    <div class="row no-wrap items-center justify-center full-height index-row">
       
       <!-- Left Column - Welcome/Login Section -->
       <div class="left-column col">
@@ -176,101 +176,116 @@ async function handleQuickSignup() {
 
 <style scoped>
 .index-page {
-  height: 100vh;
-  overflow: hidden;
+  min-height: calc(100vh - 56px);
+  background: var(--od-bg-page);
 }
 
-.row {
-  height: 100%;
+.index-row {
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: calc(100vh - 56px);
 }
 
-/* Left Column - Login Section */
-.left-column {
-  background: linear-gradient(135deg, #4db8a8 0%, #2d9d8f 100%);
+.left-column,
+.right-column {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  min-width: 40%;
+  padding: 36px;
+  min-height: 100%;
+}
+
+.left-column {
+  flex: 0 0 360px;
+  background: var(--od-bg-surface);
+  border-right: 1px solid var(--od-border);
+}
+
+.right-column {
+  flex: 1 1 520px;
+  min-width: 360px;
+  background: var(--od-bg-page);
 }
 
 .welcome-section {
-  text-align: center;
-  color: white;
-}
-
-.welcome-title {
-  font-size: 36px;
-  font-weight: 700;
-  margin: 0 0 16px 0;
-  line-height: 1.2;
-}
-
-.welcome-subtitle {
-  font-size: 15px;
-  font-weight: 400;
-  margin: 0 0 32px 0;
-  opacity: 0.95;
-  line-height: 1.6;
-  max-width: 280px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.welcome-btn {
-  background: white !important;
-  color: #4db8a8 !important;
-  padding: 12px 32px !important;
-  border-radius: 24px !important;
-  font-weight: 600 !important;
-  font-size: 13px !important;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.welcome-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Right Column - Signup Section */
-.right-column {
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  overflow-y: auto;
+  max-width: 340px;
+  width: 100%;
+  text-align: left;
 }
 
 .signup-section {
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
+  background: var(--od-bg-surface);
+  border: 1px solid var(--od-border);
+  border-radius: 32px;
+  padding: 32px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+}
+
+.welcome-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0 0 18px 0;
+  color: var(--od-text-1);
+}
+
+.welcome-subtitle {
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0 0 28px 0;
+  color: var(--od-text-2);
+}
+
+.welcome-btn {
+  background: var(--od-accent) !important;
+  color: #fff !important;
+  padding: 14px 34px !important;
+  border-radius: 24px !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  transition: all 0.3s ease;
+}
+
+.welcome-btn:hover {
+  transform: translateY(-2px);
+}
+
+.right-column {
+  min-width: 60%;
+  background: var(--od-bg-page);
+}
+
+.signup-section {
+  width: 100%;
+  max-width: 420px;
+  background: var(--od-bg-surface);
+  border: 1px solid var(--od-border);
+  border-radius: 32px;
+  padding: 32px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
 }
 
 .signup-title {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
-  margin: 0 0 8px 0;
-  color: #4db8a8;
+  margin: 0 0 10px 0;
+  color: var(--od-text-1);
 }
 
 .signup-subtitle {
-  font-size: 13px;
-  color: #999;
+  font-size: 14px;
+  color: var(--od-text-3);
   margin: 0 0 24px 0;
-  font-weight: 500;
 }
 
-/* Social Icons */
 .social-icons {
   display: flex;
   justify-content: center;
   gap: 16px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid var(--od-border);
 }
 
 .social-icon {
@@ -280,92 +295,75 @@ async function handleQuickSignup() {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid #d8d8d8;
-  color: #666;
+  border: 1px solid var(--od-border);
+  color: var(--od-text-2);
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 16px;
 }
 
 .social-icon:hover {
-  border-color: #4db8a8;
-  color: #4db8a8;
+  border-color: var(--od-accent);
+  color: var(--od-accent);
   transform: translateY(-2px);
 }
 
-.social-icon.facebook:hover {
-  background: #f0f2f5;
-}
-
-.social-icon.google:hover {
-  background: #f8f9fa;
-}
-
-.social-icon.linkedin:hover {
-  background: #f0f6ff;
-}
-
-/* Form */
 .form-group {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .form-input {
   font-size: 13px;
-  background: #f8f9fa;
 }
 
 :deep(.form-input .q-field__control) {
-  padding: 8px 12px !important;
+  padding: 10px 12px !important;
+  background: var(--od-bg-subtle);
+  border-radius: 16px;
 }
 
 :deep(.form-input .q-icon) {
-  color: #999;
+  color: var(--od-text-3);
+}
+
+:deep(.form-input.q-focused .q-icon) {
+  color: var(--od-accent);
 }
 
 .signup-btn {
   width: 100% !important;
-  background: #4db8a8 !important;
+  background: var(--od-accent) !important;
   color: white !important;
-  padding: 12px !important;
+  padding: 14px !important;
   border-radius: 24px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   font-size: 13px !important;
   letter-spacing: 0.5px;
   margin-top: 16px;
-  transition: all 0.3s ease;
-}
-
-.signup-btn:hover {
-  background: #3da598 !important;
-  transform: translateY(-2px);
 }
 
 .form-footer {
   text-align: center;
-  font-size: 12px;
-  color: #999;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #e8e8e8;
+  font-size: 13px;
+  color: var(--od-text-3);
+  margin-top: 18px;
 }
 
 .full-form-link {
-  color: #4db8a8;
+  color: var(--od-accent);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .full-form-link:hover {
   text-decoration: underline;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .left-column,
   .right-column {
     min-width: 100%;
-    padding: 30px 20px;
+    padding: 24px;
   }
 
   .row {
@@ -373,17 +371,8 @@ async function handleQuickSignup() {
   }
 
   .welcome-title {
-    font-size: 28px;
+    font-size: 32px;
   }
-
-  .signup-title {
-    font-size: 24px;
-  }
-}
-
-/* Form icon colors */
-:deep(.form-input.q-focused .q-icon) {
-  color: #4db8a8;
 }
 </style>
 

@@ -116,7 +116,7 @@ async function handleLogin() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #f5fbf9 0%, #ffffff 100%);
+  background: var(--od-bg-page);
 }
 
 .login-card-wrapper {
@@ -125,21 +125,21 @@ async function handleLogin() {
 }
 
 .login-card {
-  background: white;
-  border: 1px solid rgba(77, 184, 168, 0.16);
-  border-radius: 28px;
-  box-shadow: 0 22px 50px rgba(42, 81, 68, 0.08);
-  padding: 28px;
+  background: var(--od-bg-surface);
+  border: 1px solid var(--od-border);
+  border-radius: 24px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  padding: 26px;
 }
 
 .login-card::before {
   content: '';
   display: block;
-  width: 70px;
+  width: 64px;
   height: 5px;
-  background: #4db8a8;
+  background: var(--od-accent);
   border-radius: 12px;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .login-header {
@@ -147,16 +147,16 @@ async function handleLogin() {
 }
 
 .login-title {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 700;
   margin-bottom: 10px;
-  color: #2d9d8f;
+  color: var(--od-accent);
 }
 
 .login-subtitle {
   margin: 0;
-  color: #63777d;
-  font-size: 15px;
+  color: var(--od-text-3);
+  font-size: 14px;
 }
 
 .login-btn {
@@ -192,20 +192,20 @@ async function handleLogin() {
 }
 
 .login-input {
-  --q-color: #4db8a8;
+  --q-color: var(--od-accent);
 }
 
 :deep(.login-input .q-field__control) {
-  background: #f3fbf8;
+  background: var(--od-bg-subtle);
   border-radius: 16px;
 }
 
 :deep(.login-input .q-field__native) {
-  color: #253d38;
+  color: var(--od-text-1);
 }
 
 :deep(.login-input .q-field__label) {
-  color: #4a7b77;
+  color: var(--od-text-3);
 }
 
 :deep(.login-input .q-field__border) {

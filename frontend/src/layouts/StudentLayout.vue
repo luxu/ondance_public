@@ -56,7 +56,8 @@ const navSections = [
   {
     label: null,
     items: [
-      { to: '/aluno/inicio',       icon: 'home',        label: 'Início' },
+      { to: '/',                  icon: 'home',        label: 'Página Inicial' },
+      { to: '/aluno/inicio',       icon: 'dashboard',   label: 'Início' },
       { to: '/aluno/cursos',       icon: 'play_circle', label: 'Meus Cursos',  badge: '3' },
       { to: '/aluno/explorar',     icon: 'explore',     label: 'Explorar' },
       { to: '/aluno/certificados', icon: 'workspace_premium', label: 'Certificados' }
