@@ -5,6 +5,7 @@ from api import views
 
 urlpatterns = [
     path('users/', views.create_user, name='users'),
+    path('password/change/', views.password_change, name='password_change'),
     path('courses/', views.courses, name='courses'),
     path('cities/', views.cities, name='cities'),
     path('states/', views.states, name='states'),

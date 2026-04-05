@@ -59,6 +59,31 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class PasswordChangeSerializer(serializers.Serializer):
+    MIN_PASSWORD_LENGTH = 8
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Senha atual inválida.')
+        return value
+
+    def validate_new_password(self, value):
+        if value is None or len(value) < self.MIN_PASSWORD_LENGTH:
+            raise serializers.ValidationError(
+                f'Senha deve ter pelo menos {self.MIN_PASSWORD_LENGTH} caracteres.'
+            )
+        return value
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        user.set_password(self.validated_data['new_password'])
+        user.save()
+        return user
+
+
 class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = State

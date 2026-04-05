@@ -1,6 +1,14 @@
-from rest_framework import generics
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from api.serializers import CitySerializer, CourseSerializer, StateSerializer, UserSerializer
+from api.serializers import (
+    CitySerializer,
+    CourseSerializer,
+    PasswordChangeSerializer,
+    StateSerializer,
+    UserSerializer,
+)
 from course.models import Course
 from user.models import City, State, User
 
@@ -53,3 +61,19 @@ class CourseListCreate(generics.ListCreateAPIView):
 
 
 courses = CourseListCreate.as_view()
+
+
+class PasswordChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = PasswordChangeSerializer(
+            data=request.data,
+            context={'request': request},
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+password_change = PasswordChangeView.as_view()
