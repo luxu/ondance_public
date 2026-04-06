@@ -8,24 +8,11 @@
         <p class="brand-subtitle">Crie sua conta para começar</p>
       </div>
 
-      <q-form ref="formRef" @submit.prevent="handleSubmit">
+      <q-form @submit.prevent="handleSubmit">
 
         <q-card flat bordered class="register-card">
           <q-card-section>
             <div class="column q-gutter-md">
-
-              <!-- Name Field -->
-              <q-input
-                v-model="form.name"
-                outlined
-                dense
-                label="Nome Completo *"
-                placeholder="Digite seu nome"
-                :rules="[
-                  val => !!val || 'Campo obrigatório',
-                  val => val.length >= 3 || 'Mínimo 3 caracteres'
-                ]"
-              />
 
               <!-- Email Field -->
               <q-input
@@ -66,23 +53,6 @@
                   />
                 </template>
               </q-input>
-
-              <!-- Role Select -->
-              <q-select
-                class="register-input"
-                v-model="form.role"
-                filled
-                dense
-                rounded
-                label="Tipo de Usuário *"
-                :options="roleOptions"
-                option-value="value"
-                option-label="label"
-                emit-value
-                map-options
-                :rules="[val => !!val || 'Campo obrigatório']"
-                popup-content-class="register-select-popup"
-              />
 
             </div>
           </q-card-section>
@@ -186,13 +156,9 @@
 import { ref } from 'vue'
 import { authService } from 'src/services/auth'
 
-const formRef = ref(null)
-
 const form = ref({
-  name: '',
   email: '',
   password: '',
-  role: 'student'
 })
 
 const showPassword = ref(false)
@@ -200,10 +166,12 @@ const loading = ref(false)
 const errorMessage = ref('')
 const showConfirmation = ref(false)
 
-const roleOptions = [
-  { label: 'Estudante', value: 'student' },
-  { label: 'Professor', value: 'teacher' }
-]
+function extractApiError(error, fallback = 'Erro inesperado. Tente novamente.') {
+  const data = error.response?.data
+  if (!data) return fallback
+  const messages = [...new Set(Object.values(data).flat())]
+  return messages.length ? messages.join(' ') : fallback
+}
 
 async function handleSubmit() {
   loading.value = true
@@ -211,17 +179,13 @@ async function handleSubmit() {
 
   try {
     await authService.register({
-      name: form.value.name,
       email: form.value.email,
       password: form.value.password,
-      role: form.value.role
     })
 
-    // Show confirmation screen
     showConfirmation.value = true
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || 'Erro ao criar conta. Tente novamente.'
-    console.error('Registration error:', error)
+    errorMessage.value = extractApiError(error, 'Erro ao criar conta. Tente novamente.')
   } finally {
     loading.value = false
   }

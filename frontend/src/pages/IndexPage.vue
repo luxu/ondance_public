@@ -40,23 +40,7 @@
           </div>
 
           <!-- Form -->
-          <q-form ref="formRef" @submit.prevent="handleQuickSignup">
-            <div class="form-group">
-              <q-input
-                v-model="quickForm.name"
-                outlined
-                dense
-                type="text"
-                placeholder="Nome"
-                class="form-input"
-                :rules="[val => !!val || 'Campo obrigatório']"
-              >
-                <template #prepend>
-                  <q-icon name="person" />
-                </template>
-              </q-input>
-            </div>
-
+          <q-form @submit.prevent="handleQuickSignup">
             <div class="form-group">
               <q-input
                 v-model="quickForm.email"
@@ -131,10 +115,7 @@ import { authService } from 'src/services/auth'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
-const formRef = ref(null)
-
 const quickForm = ref({
-  name: '',
   email: '',
   password: ''
 })
@@ -142,30 +123,32 @@ const quickForm = ref({
 const showQuickPassword = ref(false)
 const signingUp = ref(false)
 
+function extractApiError(error, fallback = 'Erro inesperado. Tente novamente.') {
+  const data = error.response?.data
+  if (!data) return fallback
+  const messages = [...new Set(Object.values(data).flat())]
+  return messages.length ? messages.join(' ') : fallback
+}
+
 async function handleQuickSignup() {
   signingUp.value = true
   try {
     await authService.register({
-      name: quickForm.value.name,
       email: quickForm.value.email,
       password: quickForm.value.password,
-      role: 'student'
     })
-    
+
     $q.notify({
       type: 'positive',
       message: 'Cadastro realizado! Verifique seu email.',
       position: 'top'
     })
-    
-    // Redirect to confirmation or reset form
-    setTimeout(() => {
-      quickForm.value = { name: '', email: '', password: '' }
-    }, 1000)
+
+    quickForm.value = { email: '', password: '' }
   } catch (error) {
     $q.notify({
       type: 'negative',
-      message: error.response?.data?.message || 'Erro ao criar conta',
+      message: extractApiError(error, 'Erro ao criar conta. Tente novamente.'),
       position: 'top'
     })
   } finally {

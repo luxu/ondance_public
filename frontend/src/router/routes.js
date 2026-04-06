@@ -91,6 +91,7 @@ const citiesRoutes = {
 const mainRoutes = {
   path: '/',
   component: () => import('layouts/MainLayout.vue'),
+  meta: { guest: true },
   children: [
     { path: '',        name: 'home',        component: () => import('pages/IndexPage.vue')         },
     { path: 'cidades', name: 'cities-list', component: () => import('pages/cities/ListPage.vue')   },

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
-// import { useAuthStore } from 'stores/auth'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -8,14 +7,18 @@ const router = createRouter({
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
 
-// router.beforeEach(async (to) => {
-//   const auth = useAuthStore()
-//   if (to.meta.guest) return auth.isAuthenticated ? auth.homeRoute : true
-//   if (to.name === '404') return true
-//   if (!auth.isAuthenticated) return '/login'
-//   if (!auth.user) await auth.fetchMe()
-//   if (to.meta.role && auth.user?.role !== to.meta.role) return auth.homeRoute
-//   return true
-// })
+router.beforeEach((to) => {
+  const token = localStorage.getItem('access_token')
+
+  if (!to.meta.guest && !token) {
+    return '/login'
+  }
+
+  if (token && to.meta.guest && (to.name === 'login' || to.name === 'register')) {
+    return '/courses/initial'
+  }
+
+  return true
+})
 
 export default router

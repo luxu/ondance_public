@@ -75,10 +75,11 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { authService } from 'src/services/auth'
+import { useAuth } from 'src/composables/useAuth'
 
 const router = useRouter()
 const $q = useQuasar()
+const { login } = useAuth()
 const formRef = ref(null)
 
 const form = ref({ email: '', password: '' })
@@ -91,7 +92,7 @@ async function handleLogin() {
   errorMessage.value = ''
 
   try {
-    await authService.login({
+    await login({
       email: form.value.email,
       password: form.value.password
     })

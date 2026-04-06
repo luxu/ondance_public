@@ -66,8 +66,8 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-// import { useAuthStore } from 'stores/auth'
 import { useRouter } from 'vue-router'
+import { useAuth } from 'src/composables/useAuth'
 
 const props = defineProps({
   navSections: { type: Array, required: true },
@@ -75,14 +75,16 @@ const props = defineProps({
 })
 
 const drawerOpen = ref(true)
-// const auth   = useAuthStore()
 const router = useRouter()
-// const user   = computed(() => auth.user)
-const user   = "Luciano"
+const { user, logout } = useAuth()
 
 const initials = computed(() => {
-  if (!user.value?.name) return '?'
-  return user.value.name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
+  const name = user.value?.name || user.value?.email || ''
+  if (!name) return '?'
+  const parts = name.split(' ').filter(Boolean)
+  if (parts.length === 0) return '?'
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+  return (parts[0][0] + parts[1][0]).toUpperCase()
 })
 
 const roleLabel = computed(() => ({
@@ -96,7 +98,7 @@ function goToSettings () {
 }
 
 function handleLogout () {
-  // auth.logout()
+  logout()
   router.push('/login')
 }
 </script>
