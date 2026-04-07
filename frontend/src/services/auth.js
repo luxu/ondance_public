@@ -27,7 +27,6 @@ export const authService = {
   login(credentials) {
     return api.post('/token/', credentials).then((response) => {
       saveTokens(response.data)
-      console.log(response.data);      
       return response
     })
   },

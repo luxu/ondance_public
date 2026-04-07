@@ -40,57 +40,53 @@
           </div>
 
           <!-- Form -->
-          <q-form @submit.prevent="handleQuickSignup">
-            <div class="form-group">
-              <q-input
-                v-model="quickForm.email"
-                outlined
-                dense
-                type="email"
-                placeholder="Email"
-                class="form-input"
-                :rules="[
-                  val => !!val || 'Campo obrigatório',
-                  val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) || 'Email inválido'
-                ]"
-              >
-                <template #prepend>
-                  <q-icon name="mail" />
-                </template>
-              </q-input>
-            </div>
+          <q-form @submit.prevent="handleQuickSignup" class="signup-form">
+            <q-input
+              v-model="quickForm.email"
+              outlined
+              type="email"
+              label="E-mail"
+              class="form-input"
+              :rules="[
+                val => !!val || 'Campo obrigatório',
+                val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val) || 'E-mail inválido'
+              ]"
+            >
+              <template #prepend>
+                <q-icon name="mail_outline" size="18px" />
+              </template>
+            </q-input>
 
-            <div class="form-group">
-              <q-input
-                v-model="quickForm.password"
-                outlined
-                dense
-                :type="showQuickPassword ? 'text' : 'password'"
-                placeholder="Senha (mín. 8 caracteres)"
-                class="form-input"
-                :rules="[
-                  val => !!val || 'Campo obrigatório',
-                  val => val.length >= 8 || 'Mínimo 8 caracteres'
-                ]"
-              >
-                <template #prepend>
-                  <q-icon name="lock" />
-                </template>
-                <template #append>
-                  <q-icon
-                    :name="showQuickPassword ? 'visibility' : 'visibility_off'"
-                    class="cursor-pointer"
-                    @click="showQuickPassword = !showQuickPassword"
-                  />
-                </template>
-              </q-input>
-            </div>
+            <q-input
+              v-model="quickForm.password"
+              outlined
+              :type="showQuickPassword ? 'text' : 'password'"
+              label="Senha"
+              hint="Mínimo 8 caracteres"
+              class="form-input"
+              :rules="[
+                val => !!val || 'Campo obrigatório',
+                val => val.length >= 8 || 'Mínimo 8 caracteres'
+              ]"
+            >
+              <template #prepend>
+                <q-icon name="lock_outline" size="18px" />
+              </template>
+              <template #append>
+                <q-icon
+                  :name="showQuickPassword ? 'visibility' : 'visibility_off'"
+                  size="18px"
+                  class="cursor-pointer"
+                  @click="showQuickPassword = !showQuickPassword"
+                />
+              </template>
+            </q-input>
 
             <q-btn
               unelevated
               no-caps
               type="submit"
-              label="CADASTRAR"
+              label="Cadastrar"
               class="signup-btn"
               :loading="signingUp"
             />
@@ -291,38 +287,66 @@ async function handleQuickSignup() {
   transform: translateY(-2px);
 }
 
-.form-group {
-  margin-bottom: 14px;
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .form-input {
-  font-size: 13px;
+  font-size: 14px;
 }
 
 :deep(.form-input .q-field__control) {
-  padding: 10px 12px !important;
   background: var(--od-bg-subtle);
-  border-radius: 16px;
+  border-radius: 12px;
+  min-height: 52px;
+}
+
+:deep(.form-input .q-field__control::before) {
+  border-color: var(--od-border);
+  border-radius: 12px;
+}
+
+:deep(.form-input .q-field__control::after) {
+  border-radius: 12px;
+  border-color: var(--od-accent);
+}
+
+:deep(.form-input .q-field__label) {
+  color: var(--od-text-3);
+  font-size: 13px;
+}
+
+:deep(.form-input .q-field__native) {
+  color: var(--od-text-1);
+  font-size: 14px;
 }
 
 :deep(.form-input .q-icon) {
   color: var(--od-text-3);
+  transition: color 0.2s;
 }
 
-:deep(.form-input.q-focused .q-icon) {
+:deep(.form-input.q-field--focused .q-icon) {
   color: var(--od-accent);
+}
+
+:deep(.form-input .q-field__bottom) {
+  font-size: 11px;
+  padding-left: 4px;
 }
 
 .signup-btn {
   width: 100% !important;
   background: var(--od-accent) !important;
   color: white !important;
-  padding: 14px !important;
-  border-radius: 24px !important;
-  font-weight: 700 !important;
-  font-size: 13px !important;
-  letter-spacing: 0.5px;
-  margin-top: 16px;
+  height: 48px !important;
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.3px;
+  margin-top: 8px;
 }
 
 .form-footer {
