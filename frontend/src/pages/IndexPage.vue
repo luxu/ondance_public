@@ -26,17 +26,11 @@
           <h2 class="signup-title">Criar Conta</h2>
           <p class="signup-subtitle">ou use seu email para se registrar</p>
 
-          <!-- Social Login Icons -->
-          <div class="social-icons q-my-md">
-            <a href="#" class="social-icon facebook" title="Facebook">
-              <q-icon name="fab fa-facebook-f" />
-            </a>
-            <a href="#" class="social-icon google" title="Google">
-              <q-icon name="fab fa-google" />
-            </a>
-            <a href="#" class="social-icon linkedin" title="LinkedIn">
-              <q-icon name="fab fa-linkedin-in" />
-            </a>
+          <!-- Google Login -->
+          <div id="google-signup-btn" class="google-btn-wrapper" />
+
+          <div class="google-divider">
+            <span>ou use seu email</span>
           </div>
 
           <!-- Form -->
@@ -106,11 +100,27 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { authService } from 'src/services/auth'
 import { useQuasar } from 'quasar'
+import { useGoogleAuth } from 'src/composables/useGoogleAuth'
 
 const $q = useQuasar()
+const router = useRouter()
+const { initGoogleButton } = useGoogleAuth()
+
+onMounted(() => {
+  initGoogleButton('google-signup-btn', {
+    onSuccess: () => {
+      $q.notify({ type: 'positive', message: 'Conta criada com Google!' })
+      router.push('/courses/initial')
+    },
+    onError: () => {
+      $q.notify({ type: 'negative', message: 'Erro ao autenticar com Google.' })
+    },
+  })
+})
 const quickForm = ref({
   email: '',
   password: ''
@@ -259,32 +269,27 @@ async function handleQuickSignup() {
   margin: 0 0 24px 0;
 }
 
-.social-icons {
+.google-btn-wrapper {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--od-border);
+  margin-bottom: 16px;
 }
 
-.social-icon {
-  display: inline-flex;
+.google-divider {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--od-border);
-  color: var(--od-text-2);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 16px;
+  gap: 12px;
+  margin-bottom: 16px;
+  color: var(--od-text-3);
+  font-size: 12px;
 }
 
-.social-icon:hover {
-  border-color: var(--od-accent);
-  color: var(--od-accent);
-  transform: translateY(-2px);
+.google-divider::before,
+.google-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--od-border);
 }
 
 .signup-form {

@@ -61,6 +61,12 @@
             </div>
           </q-form>
 
+          <div class="google-divider">
+            <span>ou continue com</span>
+          </div>
+
+          <div id="google-login-btn" class="google-btn-wrapper" />
+
           <div class="signup-footer">
             <span>Não tem uma conta?</span>
             <router-link to="/register" class="signup-link">Cadastre-se</router-link>
@@ -72,15 +78,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useAuth } from 'src/composables/useAuth'
+import { useGoogleAuth } from 'src/composables/useGoogleAuth'
 
 const router = useRouter()
 const $q = useQuasar()
 const { login } = useAuth()
+const { initGoogleButton } = useGoogleAuth()
 const formRef = ref(null)
+
+onMounted(() => {
+  initGoogleButton('google-login-btn', {
+    onSuccess: () => {
+      $q.notify({ type: 'positive', message: 'Login com Google realizado!' })
+      router.push('/courses/initial')
+    },
+    onError: () => {
+      $q.notify({ type: 'negative', message: 'Erro ao autenticar com Google.' })
+    },
+  })
+})
 
 const form = ref({ email: '', password: '' })
 const showPassword = ref(false)
@@ -172,6 +192,29 @@ async function handleLogin() {
 
 .login-btn:hover {
   background: #3aa08d;
+}
+
+.google-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 14px;
+  color: var(--od-text-3);
+  font-size: 12px;
+}
+
+.google-divider::before,
+.google-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--od-border);
+}
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
 }
 
 .signup-footer {

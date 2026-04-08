@@ -35,6 +35,10 @@ export const authService = {
     return api.post('/register/', userData)
   },
 
+  googleLogin(credential) {
+    return api.post('/auth/social/google/', { credential })
+  },
+
   refresh(refreshToken) {
     return api.post('/token/refresh/', { refresh: refreshToken }).then((response) => {
       saveTokens(response.data)
