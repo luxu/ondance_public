@@ -98,12 +98,21 @@ const mainRoutes = {
   ]
 }
 
+const profileRoute = {
+  path: '/perfil',
+  component: () => import('layouts/CoursesLayout.vue'),
+  children: [
+    { path: '', name: 'profile', component: () => import('pages/ProfilePage.vue') }
+  ]
+}
+
 const routes = [
   studentRoutes,
   coursesRoutes,
   citiesRoutes,
   loginRoutes,
   registerRoutes,
+  profileRoute,
   // professorRoutes,
   // adminRoutes,
   mainRoutes,

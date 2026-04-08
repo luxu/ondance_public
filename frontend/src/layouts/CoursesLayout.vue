@@ -18,13 +18,31 @@
           >
             <q-tooltip>{{ isDark ? 'Modo claro' : 'Modo escuro' }}</q-tooltip>
           </q-btn>
-          <q-btn
-            flat round dense
-            icon="logout"
-            :style="{ color: 'var(--od-text-3)' }"
-            @click="handleLogout"
-          >
-            <q-tooltip>Sair</q-tooltip>
+
+          <q-btn flat round dense style="padding: 2px;">
+            <q-avatar
+              size="32px"
+              :style="{ background: 'var(--od-accent)', color: '#fff', fontSize: '13px', fontWeight: 600 }"
+            >
+              {{ userInitial }}
+            </q-avatar>
+            <q-menu anchor="bottom right" self="top right" :offset="[0, 8]">
+              <q-list style="min-width: 160px;">
+                <q-item clickable v-close-popup :to="'/perfil'">
+                  <q-item-section avatar>
+                    <q-icon name="person_outline" size="18px" />
+                  </q-item-section>
+                  <q-item-section>Meu perfil</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-close-popup @click="handleLogout">
+                  <q-item-section avatar>
+                    <q-icon name="logout" size="18px" />
+                  </q-item-section>
+                  <q-item-section>Sair</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </q-btn>
         </div>
       </q-toolbar>
@@ -45,22 +63,38 @@
       </router-view>
     </q-page-container>
 
+    <OnboardingModal
+      v-if="showOnboarding"
+      @close="showOnboarding = false"
+      @saved="showOnboarding = false"
+    />
+
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppSidebar from 'components/shared/AppSidebar.vue'
+import OnboardingModal from 'components/shared/OnboardingModal.vue'
 import { useDarkMode } from 'src/composables/useDarkMode'
 import { useAuth } from 'src/composables/useAuth'
+
+const profileComplete = localStorage.getItem('profile_complete')
+const onboardingDismissed = localStorage.getItem('onboarding_dismissed')
+const showOnboarding = ref(profileComplete === 'false' && !onboardingDismissed)
 
 const drawerOpen = ref(true)
 function toggleDrawer () { drawerOpen.value = !drawerOpen.value }
 
 const { isDark, toggle: toggleDark } = useDarkMode()
-const { logout } = useAuth()
+const { logout, user } = useAuth()
 const router = useRouter()
+
+const userInitial = computed(() => {
+  const email = user.value?.email || ''
+  return email.charAt(0).toUpperCase()
+})
 
 function handleLogout () {
   logout()

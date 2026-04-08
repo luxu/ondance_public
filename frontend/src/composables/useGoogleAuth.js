@@ -55,6 +55,7 @@ export function useGoogleAuth() {
         try {
           const response = await authService.googleLogin(credential)
           saveTokens(response.data)
+          localStorage.setItem('profile_complete', response.data.profile_complete ? 'true' : 'false')
           onSuccess?.(response)
         } catch (error) {
           onError?.(error)
