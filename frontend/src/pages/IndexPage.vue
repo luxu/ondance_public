@@ -1,39 +1,39 @@
 <template>
-  <q-page class="index-page q-pa-none">
-    <!-- Two Column Layout -->
-    <div class="row no-wrap items-center justify-center full-height index-row">
-      
-      <!-- Left Column - Welcome/Login Section -->
-      <div class="left-column col">
-        <div class="welcome-section">
-          <h1 class="welcome-title">Bem-vindo de volta!</h1>
-          <p class="welcome-subtitle">Para se manter conectado, faça login com suas informações pessoais</p>
-          
-          <router-link to="/login">
+  <q-page class="landing-page">
+
+    <!-- ── Seção 1: Hero ─────────────────────────────── -->
+    <section class="hero-section">
+      <div class="section-container hero-container">
+
+        <!-- Texto -->
+        <div class="hero-text">
+          <p class="hero-eyebrow">Plataforma oficial ABCAA</p>
+          <h1 class="hero-headline">
+            Aprenda dança com os melhores professores do Brasil
+          </h1>
+          <p class="hero-sub">
+            Cursos em vídeo para todos os níveis — do iniciante ao avançado.
+            No seu ritmo, onde quiser.
+          </p>
+          <div class="hero-actions">
             <q-btn
               unelevated
               no-caps
-              label="FAZER LOGIN"
-              class="welcome-btn"
+              label="Começar gratuitamente"
+              class="hero-btn-primary"
+              @click="scrollToSignup"
             />
-          </router-link>
-        </div>
-      </div>
-
-      <!-- Right Column - Signup Section -->
-      <div class="right-column col">
-        <div class="signup-section">
-          <h2 class="signup-title">Criar Conta</h2>
-          <p class="signup-subtitle">ou use seu email para se registrar</p>
-
-          <!-- Google Login -->
-          <div id="google-signup-btn" class="google-btn-wrapper" />
-
-          <div class="google-divider">
-            <span>ou use seu email</span>
+            <router-link to="/courses/lista" class="hero-btn-ghost">
+              Ver cursos
+            </router-link>
           </div>
+        </div>
 
-          <!-- Form -->
+        <!-- Formulário de cadastro -->
+        <div id="signup-form" class="signup-card">
+          <h2 class="signup-title">Crie sua conta grátis</h2>
+          <p class="signup-sub">Comece a aprender hoje mesmo</p>
+
           <q-form @submit.prevent="handleQuickSignup" class="signup-form">
             <q-input
               v-model="quickForm.email"
@@ -54,7 +54,7 @@
             <q-input
               v-model="quickForm.password"
               outlined
-              :type="showQuickPassword ? 'text' : 'password'"
+              :type="showPassword ? 'text' : 'password'"
               label="Senha"
               hint="Mínimo 8 caracteres"
               class="form-input"
@@ -68,10 +68,10 @@
               </template>
               <template #append>
                 <q-icon
-                  :name="showQuickPassword ? 'visibility' : 'visibility_off'"
+                  :name="showPassword ? 'visibility' : 'visibility_off'"
                   size="18px"
                   class="cursor-pointer"
-                  @click="showQuickPassword = !showQuickPassword"
+                  @click="showPassword = !showPassword"
                 />
               </template>
             </q-input>
@@ -86,16 +86,106 @@
             />
           </q-form>
 
+          <div class="divider">
+            <span>ou continue com</span>
+          </div>
+
+          <div id="google-signup-btn" class="google-btn-wrapper" />
+
           <p class="form-footer">
-            Prefere preencher tudo?
-            <router-link to="/register" class="full-form-link">
-              Formulário completo
-            </router-link>
+            Já tem conta?
+            <router-link to="/login" class="footer-link">Entrar</router-link>
           </p>
         </div>
-      </div>
 
-    </div>
+      </div>
+    </section>
+
+    <!-- ── Seção 2: Stats ─────────────────────────────── -->
+    <section class="stats-section">
+      <div class="section-container stats-container">
+        <div v-for="stat in stats" :key="stat.label" class="stat-item">
+          <span class="stat-value">{{ stat.value }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Seção 3: Categorias ────────────────────────── -->
+    <section class="categories-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Explore os estilos</h2>
+          <p class="section-desc">Encontre o ritmo que combina com você</p>
+        </div>
+
+        <div class="categories-grid">
+          <div
+            v-for="cat in categories"
+            :key="cat.name"
+            class="category-card od-card"
+            @click="$router.push('/courses/lista')"
+          >
+            <span class="category-emoji">{{ cat.emoji }}</span>
+            <span class="category-name od-card-title">{{ cat.name }}</span>
+            <span class="category-link">Ver cursos →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Seção 4: Como funciona ─────────────────────── -->
+    <section class="how-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Como funciona</h2>
+          <p class="section-desc">Em 3 passos simples você já está dançando</p>
+        </div>
+
+        <div class="steps-grid">
+          <div v-for="step in steps" :key="step.title" class="step-item">
+            <div class="step-icon-wrap">
+              <q-icon :name="step.icon" size="28px" class="step-icon" />
+              <span class="step-number">{{ step.number }}</span>
+            </div>
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-desc">{{ step.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Seção 5: CTA Final + Footer ───────────────── -->
+    <section class="cta-section">
+      <div class="section-container cta-container">
+        <h2 class="cta-title">Pronto para começar?</h2>
+        <p class="cta-sub">Junte-se a centenas de alunos que já estão aprendendo</p>
+        <q-btn
+          unelevated
+          no-caps
+          label="Criar conta gratuita"
+          class="cta-btn"
+          @click="scrollToSignup"
+        />
+      </div>
+    </section>
+
+    <footer class="landing-footer">
+      <div class="section-container footer-container">
+        <div class="od-logo footer-logo">
+          <span class="od-logo-dot" />
+          <span>OnDance</span>
+        </div>
+        <p class="footer-copy">
+          © {{ currentYear }} OnDance · ABCAA — Associação Beneficente e Cultural Amor em Ação
+        </p>
+        <nav class="footer-nav">
+          <a href="#" class="footer-link-item">Sobre</a>
+          <a href="#" class="footer-link-item">Contato</a>
+        </nav>
+      </div>
+    </footer>
+
   </q-page>
 </template>
 
@@ -110,10 +200,12 @@ const $q = useQuasar()
 const router = useRouter()
 const { initGoogleButton } = useGoogleAuth()
 
+const currentYear = new Date().getFullYear()
+
 onMounted(() => {
   initGoogleButton('google-signup-btn', {
     onSuccess: () => {
-      $q.notify({ type: 'positive', message: 'Conta criada com Google!' })
+      $q.notify({ type: 'positive', message: 'Login realizado com sucesso!' })
       router.push('/courses/initial')
     },
     onError: () => {
@@ -121,13 +213,15 @@ onMounted(() => {
     },
   })
 })
-const quickForm = ref({
-  email: '',
-  password: ''
-})
 
-const showQuickPassword = ref(false)
+const quickForm = ref({ email: '', password: '' })
+const showPassword = ref(false)
 const signingUp = ref(false)
+
+function scrollToSignup() {
+  const el = document.getElementById('signup-form')
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
 
 function extractApiError(error, fallback = 'Erro inesperado. Tente novamente.') {
   const data = error.response?.data
@@ -143,13 +237,7 @@ async function handleQuickSignup() {
       email: quickForm.value.email,
       password: quickForm.value.password,
     })
-
-    $q.notify({
-      type: 'positive',
-      message: 'Cadastro realizado! Verifique seu email.',
-      position: 'top'
-    })
-
+    $q.notify({ type: 'positive', message: 'Cadastro realizado! Verifique seu email.', position: 'top' })
     quickForm.value = { email: '', password: '' }
   } catch (error) {
     $q.notify({
@@ -161,135 +249,152 @@ async function handleQuickSignup() {
     signingUp.value = false
   }
 }
+
+const stats = [
+  { value: '500+', label: 'Alunos matriculados' },
+  { value: '30+',  label: 'Cursos disponíveis' },
+  { value: '200h', label: 'De conteúdo em vídeo' },
+]
+
+const categories = [
+  { emoji: '🩰', name: 'Ballet' },
+  { emoji: '🥁', name: 'Samba' },
+  { emoji: '🪗', name: 'Forró' },
+  { emoji: '🎤', name: 'Hip-Hop' },
+  { emoji: '💫', name: 'Contemporâneo' },
+  { emoji: '🎵', name: 'Funk' },
+]
+
+const steps = [
+  { number: '01', icon: 'person_add',   title: 'Crie sua conta',       desc: 'Cadastro gratuito em menos de 1 minuto. Sem cartão de crédito.' },
+  { number: '02', icon: 'school',        title: 'Escolha um curso',      desc: 'Filtre por estilo, nível e professor. Encontre o ideal para você.' },
+  { number: '03', icon: 'play_circle',   title: 'Aprenda no seu ritmo',  desc: 'Assista quando e onde quiser. Pause, repita, domine cada movimento.' },
+]
 </script>
 
 <style scoped>
-.index-page {
-  min-height: calc(100vh - 56px);
+.landing-page {
   background: var(--od-bg-page);
 }
 
-.index-row {
-  max-width: 1080px;
-  width: 100%;
+/* ── Utilitários ── */
+.section-container {
+  max-width: 1200px;
   margin: 0 auto;
-  min-height: calc(100vh - 56px);
+  padding: 0 24px;
 }
 
-.left-column,
-.right-column {
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--od-text-1);
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--od-text-3);
+  margin: 0;
+}
+
+/* ── Hero ── */
+.hero-section {
+  padding: 80px 0 64px;
+  background: linear-gradient(135deg, rgba(123, 94, 167, 0.06) 0%, transparent 60%);
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 64px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--od-accent);
+  margin: 0 0 16px;
+}
+
+.hero-headline {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  color: var(--od-text-1);
+  margin: 0 0 20px;
+}
+
+.hero-sub {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--od-text-2);
+  margin: 0 0 36px;
+  max-width: 480px;
+}
+
+.hero-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 36px;
-  min-height: 100%;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.left-column {
-  flex: 0 0 360px;
-  background: var(--od-bg-surface);
-  border-right: 1px solid var(--od-border);
-}
-
-.right-column {
-  flex: 1 1 520px;
-  min-width: 360px;
-  background: var(--od-bg-page);
-}
-
-.welcome-section {
-  max-width: 340px;
-  width: 100%;
-  text-align: left;
-}
-
-.signup-section {
-  width: 100%;
-  max-width: 420px;
-  background: var(--od-bg-surface);
-  border: 1px solid var(--od-border);
-  border-radius: 32px;
-  padding: 32px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
-}
-
-.welcome-title {
-  font-size: 42px;
-  font-weight: 700;
-  margin: 0 0 18px 0;
-  color: var(--od-text-1);
-}
-
-.welcome-subtitle {
-  font-size: 16px;
-  line-height: 1.8;
-  margin: 0 0 28px 0;
-  color: var(--od-text-2);
-}
-
-.welcome-btn {
+.hero-btn-primary {
   background: var(--od-accent) !important;
   color: #fff !important;
-  padding: 14px 34px !important;
-  border-radius: 24px !important;
-  font-weight: 700 !important;
-  font-size: 13px !important;
-  transition: all 0.3s ease;
+  height: 48px !important;
+  padding: 0 28px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
 }
 
-.welcome-btn:hover {
-  transform: translateY(-2px);
+.hero-btn-ghost {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--od-text-2);
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--od-border);
+  transition: border-color 0.15s, color 0.15s;
 }
 
-.right-column {
-  min-width: 60%;
-  background: var(--od-bg-page);
+.hero-btn-ghost:hover {
+  border-color: var(--od-accent);
+  color: var(--od-accent);
 }
 
-.signup-section {
-  width: 100%;
-  max-width: 420px;
+/* Signup card */
+.signup-card {
   background: var(--od-bg-surface);
   border: 1px solid var(--od-border);
-  border-radius: 32px;
-  padding: 32px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+  border-radius: 24px;
+  padding: 36px 32px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.07);
 }
 
 .signup-title {
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 700;
-  margin: 0 0 10px 0;
   color: var(--od-text-1);
+  margin: 0 0 4px;
 }
 
-.signup-subtitle {
-  font-size: 14px;
+.signup-sub {
+  font-size: 13px;
   color: var(--od-text-3);
-  margin: 0 0 24px 0;
-}
-
-.google-btn-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.google-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-  color: var(--od-text-3);
-  font-size: 12px;
-}
-
-.google-divider::before,
-.google-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--od-border);
+  margin: 0 0 24px;
 }
 
 .signup-form {
@@ -298,23 +403,19 @@ async function handleQuickSignup() {
   gap: 4px;
 }
 
-.form-input {
-  font-size: 14px;
-}
-
 :deep(.form-input .q-field__control) {
   background: var(--od-bg-subtle);
-  border-radius: 12px;
-  min-height: 52px;
+  border-radius: 10px;
+  min-height: 50px;
 }
 
 :deep(.form-input .q-field__control::before) {
   border-color: var(--od-border);
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 :deep(.form-input .q-field__control::after) {
-  border-radius: 12px;
+  border-radius: 10px;
   border-color: var(--od-accent);
 }
 
@@ -330,61 +431,328 @@ async function handleQuickSignup() {
 
 :deep(.form-input .q-icon) {
   color: var(--od-text-3);
-  transition: color 0.2s;
 }
 
 :deep(.form-input.q-field--focused .q-icon) {
   color: var(--od-accent);
 }
 
-:deep(.form-input .q-field__bottom) {
-  font-size: 11px;
-  padding-left: 4px;
-}
-
 .signup-btn {
   width: 100% !important;
   background: var(--od-accent) !important;
   color: white !important;
-  height: 48px !important;
-  border-radius: 12px !important;
+  height: 46px !important;
+  border-radius: 10px !important;
   font-weight: 600 !important;
   font-size: 14px !important;
-  letter-spacing: 0.3px;
   margin-top: 8px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: var(--od-text-4);
+  font-size: 12px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--od-border);
+}
+
+.google-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .form-footer {
   text-align: center;
   font-size: 13px;
   color: var(--od-text-3);
-  margin-top: 18px;
+  margin: 0;
 }
 
-.full-form-link {
+.footer-link {
   color: var(--od-accent);
   text-decoration: none;
   font-weight: 700;
 }
 
-.full-form-link:hover {
+.footer-link:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 960px) {
-  .left-column,
-  .right-column {
-    min-width: 100%;
-    padding: 24px;
+/* ── Stats ── */
+.stats-section {
+  padding: 48px 0;
+  background: var(--od-bg-surface);
+  border-top: 1px solid var(--od-border);
+  border-bottom: 1px solid var(--od-border);
+}
+
+.stats-container {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-value {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--od-accent);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--od-text-3);
+  font-weight: 500;
+}
+
+/* ── Categories ── */
+.categories-section {
+  padding: 80px 0;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--od-border) !important;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+.category-card:hover {
+  border-color: var(--od-accent) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(123, 94, 167, 0.12);
+}
+
+.category-emoji {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.category-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.category-link {
+  font-size: 11px;
+  color: var(--od-accent);
+  font-weight: 500;
+}
+
+/* ── Como funciona ── */
+.how-section {
+  padding: 80px 0;
+  background: var(--od-bg-surface);
+  border-top: 1px solid var(--od-border);
+  border-bottom: 1px solid var(--od-border);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step-icon-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-icon {
+  color: var(--od-accent) !important;
+}
+
+.step-number {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--od-text-4);
+  letter-spacing: 0.5px;
+}
+
+.step-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--od-text-1);
+  margin: 0;
+}
+
+.step-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--od-text-3);
+  margin: 0;
+}
+
+/* ── CTA Final ── */
+.cta-section {
+  padding: 80px 0;
+  background: var(--od-accent);
+}
+
+.cta-container {
+  text-align: center;
+}
+
+.cta-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 12px;
+  letter-spacing: -0.5px;
+}
+
+.cta-sub {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 36px;
+}
+
+.cta-btn {
+  background: #fff !important;
+  color: var(--od-accent) !important;
+  height: 50px !important;
+  padding: 0 36px !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+}
+
+/* ── Footer ── */
+.landing-footer {
+  padding: 32px 0;
+  background: var(--od-bg-surface);
+  border-top: 1px solid var(--od-border);
+}
+
+.footer-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--od-text-1);
+  gap: 6px;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--od-text-4);
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-link-item {
+  font-size: 13px;
+  color: var(--od-text-3);
+  text-decoration: none;
+}
+
+.footer-link-item:hover {
+  color: var(--od-text-1);
+}
+
+/* ── Responsividade ── */
+@media (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-section {
+    padding: 48px 0 40px;
   }
 
-  .row {
-    flex-direction: column;
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 
-  .welcome-title {
+  .hero-headline {
     font-size: 32px;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+  }
+
+  .stats-container {
+    gap: 40px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .section-title {
+    font-size: 26px;
+  }
+
+  .cta-title {
+    font-size: 28px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-nav {
+    justify-content: center;
   }
 }
 </style>
-
