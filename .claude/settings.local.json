@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /e/atados/ondance/frontend/src/pages -name \"*.vue\" -exec wc -l {} +)",
+      "Skill(commit)"
+    ]
+  }
+}
