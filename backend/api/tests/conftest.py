@@ -2,7 +2,8 @@ import pytest
 from django.core.cache import cache
 from rest_framework.test import APIClient
 
-from user.models import City, State
+from course.models import Course
+from user.models import City, Profile, State, User
 
 
 @pytest.fixture(autouse=True)
@@ -45,3 +46,25 @@ def states_3(db):
 def cities_10(state):
     for i in range(12):
         City.objects.create(name=f'Cidade {i:02d}', state=state)
+
+
+@pytest.fixture
+def user(db):
+    u = User.objects.create_user(email='usuario@teste.com', password='senha123')
+    Profile.objects.create(user=u)
+    return u
+
+
+@pytest.fixture
+def teacher(db):
+    return User.objects.create_user(email='teacher@teste.com', password='senha123')
+
+
+@pytest.fixture
+def published_course(teacher):
+    return Course.objects.create(title='Ballet Clássico', teacher=teacher, is_published=True)
+
+
+@pytest.fixture
+def draft_course(teacher):
+    return Course.objects.create(title='Jazz Avançado', teacher=teacher, is_published=False)
