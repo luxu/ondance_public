@@ -111,7 +111,53 @@
       </div>
     </section>
 
-    <!-- ── Seção 3: Categorias ────────────────────────── -->
+    <!-- ── Seção 3: Cursos em destaque ──────────────────────────────────── -->
+    <section class="courses-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Cursos em destaque</h2>
+          <p class="section-desc">Comece hoje com um dos nossos cursos mais populares</p>
+        </div>
+
+        <!-- Loading -->
+        <div v-if="loadingCourses" class="courses-loading">
+          <q-spinner-dots color="var(--od-accent)" size="40px" />
+        </div>
+
+        <!-- Empty state -->
+        <div v-else-if="featuredCourses.length === 0" class="courses-empty">
+          <q-icon name="school" size="48px" style="color: var(--od-text-5);" />
+          <p>Em breve novos cursos por aqui</p>
+        </div>
+
+        <!-- Grid de cursos -->
+        <div v-else class="courses-grid">
+          <div
+            v-for="course in featuredCourses"
+            :key="course.id"
+            class="course-card od-card"
+            @click="$router.push('/courses/lista')"
+          >
+            <div class="course-thumb">
+              <q-icon name="music_note" size="28px" style="color: var(--od-accent);" />
+            </div>
+            <div class="course-info">
+              <span class="course-title od-card-title">{{ course.title }}</span>
+              <span class="course-teacher">{{ course.teacher }}</span>
+            </div>
+            <q-icon name="arrow_forward" size="18px" class="course-arrow" />
+          </div>
+        </div>
+
+        <div v-if="featuredCourses.length > 0" class="courses-footer">
+          <router-link to="/courses/lista" class="courses-all-link">
+            Ver todos os cursos →
+          </router-link>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Seção 4: Categorias ────────────────────────── -->
     <section class="categories-section">
       <div class="section-container">
         <div class="section-header">
@@ -193,6 +239,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from 'src/services/auth'
+import { courseService } from 'src/services/course'
 import { useQuasar } from 'quasar'
 import { useGoogleAuth } from 'src/composables/useGoogleAuth'
 
@@ -202,7 +249,24 @@ const { initGoogleButton } = useGoogleAuth()
 
 const currentYear = new Date().getFullYear()
 
+const loadingCourses = ref(false)
+const featuredCourses = ref([])
+
+async function fetchFeaturedCourses() {
+  loadingCourses.value = true
+  try {
+    const res = await courseService.list()
+    const courses = res.data?.results ?? res.data ?? []
+    featuredCourses.value = courses.slice(0, 6)
+  } catch {
+    featuredCourses.value = []
+  } finally {
+    loadingCourses.value = false
+  }
+}
+
 onMounted(() => {
+  fetchFeaturedCourses()
   initGoogleButton('google-signup-btn', {
     onSuccess: () => {
       $q.notify({ type: 'positive', message: 'Login realizado com sucesso!' })
@@ -700,10 +764,119 @@ const steps = [
   color: var(--od-text-1);
 }
 
+/* ── Cursos em destaque ── */
+.courses-section {
+  padding: 80px 0;
+  background: var(--od-bg-subtle);
+  border-top: 1px solid var(--od-border);
+  border-bottom: 1px solid var(--od-border);
+}
+
+.courses-loading,
+.courses-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 0;
+  color: var(--od-text-3);
+  font-size: 14px;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.course-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--od-border) !important;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.course-card:hover {
+  border-color: var(--od-accent) !important;
+  box-shadow: 0 6px 20px rgba(123, 94, 167, 0.1);
+  transform: translateY(-2px);
+}
+
+.course-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(123, 94, 167, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.course-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.course-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--od-text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.course-teacher {
+  font-size: 12px;
+  color: var(--od-text-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.course-arrow {
+  color: var(--od-text-4);
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.course-card:hover .course-arrow {
+  color: var(--od-accent);
+}
+
+.courses-footer {
+  text-align: center;
+}
+
+.courses-all-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--od-accent);
+  text-decoration: none;
+}
+
+.courses-all-link:hover {
+  text-decoration: underline;
+}
+
 /* ── Responsividade ── */
 @media (max-width: 1024px) {
   .categories-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .courses-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -731,6 +904,10 @@ const steps = [
 
   .categories-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .courses-grid {
+    grid-template-columns: 1fr;
   }
 
   .steps-grid {

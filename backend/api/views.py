@@ -64,8 +64,18 @@ states = StateList.as_view()
 
 
 class CourseListCreate(generics.ListCreateAPIView):
-    queryset = Course.objects.select_related('teacher').order_by('title')
     serializer_class = CourseSerializer
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
+    def get_queryset(self):
+        qs = Course.objects.select_related('teacher').order_by('title')
+        if not self.request.user.is_authenticated:
+            qs = qs.filter(is_published=True)
+        return qs
 
 
 courses = CourseListCreate.as_view()
