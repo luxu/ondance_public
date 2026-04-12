@@ -51,6 +51,29 @@
             <h2 class="signup-title">Crie sua conta grátis</h2>
             <p class="signup-sub">Comece a aprender hoje mesmo</p>
 
+            <div class="role-selector">
+              <button
+                type="button"
+                class="role-card"
+                :class="{ 'role-card--active': quickForm.role === 'aluno' }"
+                @click="quickForm.role = 'aluno'"
+              >
+                <span class="role-card-icon">🎓</span>
+                <span class="role-card-title">Sou Aluno</span>
+                <span class="role-card-sub">Quero aprender</span>
+              </button>
+              <button
+                type="button"
+                class="role-card"
+                :class="{ 'role-card--active': quickForm.role === 'professor' }"
+                @click="quickForm.role = 'professor'"
+              >
+                <span class="role-card-icon">🎤</span>
+                <span class="role-card-title">Sou Professor</span>
+                <span class="role-card-sub">Quero ensinar</span>
+              </button>
+            </div>
+
             <q-form @submit.prevent="handleQuickSignup" class="signup-form">
               <q-input
                 v-model="quickForm.email"
@@ -298,7 +321,7 @@ onMounted(() => {
   })
 })
 
-const quickForm = ref({ email: '', password: '' })
+const quickForm = ref({ role: 'aluno', email: '', password: '' })
 const showPassword = ref(false)
 const signingUp = ref(false)
 const signupDone = ref(false)
@@ -323,9 +346,10 @@ async function handleQuickSignup() {
     await authService.register({
       email: quickForm.value.email,
       password: quickForm.value.password,
+      role: quickForm.value.role,
     })
     signupDone.value = true
-    quickForm.value = { email: '', password: '' }
+    quickForm.value = { role: 'aluno', email: '', password: '' }
   } catch (error) {
     $q.notify({
       type: 'negative',
@@ -484,6 +508,51 @@ const steps = [
   font-size: 13px;
   color: var(--od-text-3);
   margin: 0 0 24px;
+}
+
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.role-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border-radius: 14px;
+  border: 2px solid var(--od-border);
+  background: var(--od-bg-subtle);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.role-card:hover {
+  border-color: var(--od-accent);
+}
+
+.role-card--active {
+  border-color: var(--od-accent) !important;
+  background: var(--od-bg-page) !important;
+}
+
+.role-card-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.role-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--od-text-1);
+}
+
+.role-card-sub {
+  font-size: 11px;
+  color: var(--od-text-3);
 }
 
 .signup-form {
