@@ -13,7 +13,7 @@ class CityAdmin(admin.ModelAdmin):
 
 
 @admin.register(User)
-class ProfileAdmin(admin.ModelAdmin):
+class UserAdmin(admin.ModelAdmin):
     list_display = ("__str__", "email", "role")
     # list_filter = ("user",)
     ordering = ("email",)
