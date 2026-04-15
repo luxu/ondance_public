@@ -11,7 +11,7 @@ function loadGoogleSdk() {
   return new Promise((resolve, reject) => {
     if (window.google?.accounts) return resolve()
     const script = document.createElement('script')
-    script.src = 'https://accounts.google.com/gsi/client'
+    script.src = 'https://accounts.google.com/gsi/client?hl=pt-BR'
     script.async = true
     script.defer = true
     script.onload = resolve
