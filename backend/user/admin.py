@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from user.models import City, Profile, State, User
 
+admin.site.register(State)
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
@@ -11,9 +12,12 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
-admin.site.register(User)
-admin.site.register(State)
-
+@admin.register(User)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "email", "role")
+    # list_filter = ("user",)
+    ordering = ("email",)
+    search_fields = ("email",)
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
