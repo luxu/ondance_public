@@ -1,30 +1,49 @@
-// ── Público ───────────────────────────────
-// { path: '/login', name: 'login', component: () => import('pages/LoginPage.vue'), meta: { guest: true } },
-
-const studentRoutes = {
-  path: '/students',
+const alunoRoutes = {
+  path: '/aluno',
   component: () => import('layouts/StudentLayout.vue'),
-  // meta: { role: 'student' },
+  meta: { role: 'aluno' },
   children: [
-    { path: '', redirect: '/students/initial' },
-    { path: 'initial', name: 'student-initial', component: () => import('pages/students/InitialPage.vue') },
-    // { path: 'cursos',      name: 'student-cursos',    component: () => import('pages/student/MeusCursosPage.vue')    },
-    // { path: 'explorar',    name: 'student-explorar',  component: () => import('pages/student/ExplorarPage.vue')      },
-    // { path: 'progresso',   name: 'student-progresso', component: () => import('pages/student/ProgressoPage.vue')     },
-    // { path: 'certificados',name: 'student-certs',     component: () => import('pages/student/CertificadosPage.vue')  },
-    // { path: 'cursos/:id/assistir', name: 'student-assistir', component: () => import('pages/student/AssistirPage.vue') }
+    { path: '',             redirect: '/aluno/inicio' },
+    { path: 'inicio',       name: 'aluno-inicio',       component: () => import('pages/aluno/InicioPage.vue') },
+    { path: 'meus-cursos',  name: 'aluno-meus-cursos',  component: () => import('pages/aluno/MeusCursosPage.vue') },
+    { path: 'cursos/:id/assistir', name: 'aluno-assistir', component: () => import('pages/aluno/AssistirPage.vue') },
+    { path: 'progresso',    name: 'aluno-progresso',    component: () => import('pages/aluno/ProgressoPage.vue') },
+    { path: 'certificados', name: 'aluno-certificados', component: () => import('pages/aluno/CertificadosPage.vue') },
+    { path: 'explorar',     name: 'aluno-explorar',     component: () => import('pages/aluno/ExplorarPage.vue') },
+    { path: 'configuracoes',name: 'aluno-config',       component: () => import('pages/aluno/ConfigPage.vue') },
   ]
 }
 
-const coursesRoutes = {
-  path: '/courses',
-  component: () => import('layouts/CoursesLayout.vue'),
-  meta: { guest: true },
+const professorRoutes = {
+  path: '/professor',
+  component: () => import('layouts/ProfessorLayout.vue'),
+  meta: { role: 'professor' },
   children: [
-    { path: '', redirect: '/courses/initial' },
-    { path: 'initial', name: 'course-initial', component: () => import('pages/courses/InitialPage.vue') },
-    { path: 'new',     name: 'course-new',     component: () => import('pages/courses/CourseAdd.vue')    },
-    { path: 'lista',   name: 'course-lista',   component: () => import('pages/courses/ListPage.vue')    },
+    { path: '',                    redirect: '/professor/dashboard' },
+    { path: 'dashboard',           name: 'prof-dashboard', component: () => import('pages/professor/DashboardPage.vue') },
+    { path: 'cursos',              name: 'prof-cursos',    component: () => import('pages/professor/CursosPage.vue') },
+    { path: 'cursos/novo',         name: 'prof-novo',      component: () => import('pages/courses/CourseAdd.vue') },
+    { path: 'cursos/:id/editar',   name: 'prof-editar',    component: () => import('pages/professor/EditarCursoPage.vue') },
+    { path: 'cursos/:id/aulas',    name: 'prof-aulas',     component: () => import('pages/professor/AulasPage.vue') },
+    { path: 'alunos',              name: 'prof-alunos',    component: () => import('pages/professor/AlunosPage.vue') },
+    { path: 'ganhos',              name: 'prof-ganhos',    component: () => import('pages/professor/GanhosPage.vue') },
+    { path: 'config',              name: 'prof-config',    component: () => import('pages/professor/ConfigPage.vue') },
+  ]
+}
+
+const adminRoutes = {
+  path: '/admin',
+  component: () => import('layouts/AdminLayout.vue'),
+  meta: { role: 'admin' },
+  children: [
+    { path: '',            redirect: '/admin/overview' },
+    { path: 'overview',   name: 'admin-overview',   component: () => import('pages/admin/OverviewPage.vue') },
+    { path: 'cursos',     name: 'admin-cursos',     component: () => import('pages/admin/CursosPage.vue') },
+    { path: 'usuarios',   name: 'admin-usuarios',   component: () => import('pages/admin/UsuariosPage.vue') },
+    { path: 'analytics',  name: 'admin-analytics',  component: () => import('pages/admin/AnalyticsPage.vue') },
+    { path: 'categorias', name: 'admin-categorias', component: () => import('pages/admin/CategoriasPage.vue') },
+    { path: 'campanhas',  name: 'admin-campanhas',  component: () => import('pages/admin/CampanhasPage.vue') },
+    { path: 'config',     name: 'admin-config',     component: () => import('pages/admin/ConfigPage.vue') },
   ]
 }
 
@@ -46,58 +65,6 @@ const registerRoutes = {
   ]
 }
 
-const citiesRoutes = {
-  path: '/cities',
-  component: () => import('layouts/CoursesLayout.vue'),
-  meta: { guest: true },
-  children: [
-    { path: '', redirect: '/cities/initial' },
-    { path: 'initial', name: 'cities-initial', component: () => import('pages/cities/ListPage.vue') },
-    { path: 'new',     name: 'cities-new',     component: () => import('pages/cities/AddPage.vue')  },
-  ]
-}
-
-// const professorRoutes = {
-//   path: '/professor',
-//   component: () => import('layouts/ProfessorLayout.vue'),
-//   meta: { role: 'professor' },
-//   children: [
-//     { path: '', redirect: 'dashboard' },
-//     { path: 'dashboard',   name: 'prof-dashboard', component: () => import('pages/professor/DashboardPage.vue')   },
-//     { path: 'cursos',      name: 'prof-cursos',    component: () => import('pages/professor/CursosPage.vue')      },
-//     { path: 'cursos/novo', name: 'prof-novo',      component: () => import('pages/professor/NovoCursoPage.vue')   },
-//     { path: 'cursos/:id',  name: 'prof-editar',    component: () => import('pages/professor/EditarCursoPage.vue') },
-//     { path: 'students',      name: 'prof-students',    component: () => import('pages/professor/StudentsPage.vue')      },
-//     { path: 'ganhos',      name: 'prof-ganhos',    component: () => import('pages/professor/GanhosPage.vue')      },
-//     { path: 'config',      name: 'prof-config',    component: () => import('pages/professor/ConfigPage.vue')      }
-//   ]
-// }
-
-// const adminRoutes = {
-//   path: '/admin',
-//   component: () => import('layouts/AdminLayout.vue'),
-//   meta: { role: 'admin' },
-//   children: [
-//     { path: '', redirect: 'overview' },
-//     { path: 'overview',  name: 'admin-overview',  component: () => import('pages/admin/OverviewPage.vue')  },
-//     { path: 'cursos',    name: 'admin-cursos',    component: () => import('pages/admin/CursosPage.vue')    },
-//     { path: 'usuarios',  name: 'admin-usuarios',  component: () => import('pages/admin/UsuariosPage.vue')  },
-//     { path: 'analytics', name: 'admin-analytics', component: () => import('pages/admin/AnalyticsPage.vue') },
-//     { path: 'campanhas', name: 'admin-campanhas', component: () => import('pages/admin/CampanhasPage.vue') },
-//     { path: 'config',    name: 'admin-config',    component: () => import('pages/admin/ConfigPage.vue')    }
-//   ]
-// }
-
-const mainRoutes = {
-  path: '/',
-  component: () => import('layouts/MainLayout.vue'),
-  meta: { guest: true },
-  children: [
-    { path: '',        name: 'home',        component: () => import('pages/IndexPage.vue')         },
-    { path: 'cidades', name: 'cities-list', component: () => import('pages/cities/ListPage.vue')   },
-  ]
-}
-
 const profileRoute = {
   path: '/perfil',
   component: () => import('layouts/CoursesLayout.vue'),
@@ -106,15 +73,22 @@ const profileRoute = {
   ]
 }
 
+const mainRoutes = {
+  path: '/',
+  component: () => import('layouts/MainLayout.vue'),
+  meta: { guest: true },
+  children: [
+    { path: '', name: 'home', component: () => import('pages/IndexPage.vue') },
+  ]
+}
+
 const routes = [
-  studentRoutes,
-  coursesRoutes,
-  citiesRoutes,
+  alunoRoutes,
+  professorRoutes,
+  adminRoutes,
   loginRoutes,
   registerRoutes,
   profileRoute,
-  // professorRoutes,
-  // adminRoutes,
   mainRoutes,
   { path: '/:catchAll(.*)*', name: '404', component: () => import('pages/ErrorNotFound.vue') }
 ]

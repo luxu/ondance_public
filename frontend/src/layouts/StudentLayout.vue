@@ -1,16 +1,14 @@
 <template>
   <q-layout view="lHh Lpr lFf">
 
-    <!-- Topbar -->
     <q-header flat :style="{ background: 'var(--od-bg-surface)', borderBottom: '0.5px solid var(--od-border)' }">
       <q-toolbar style="height: 56px; padding: 0 24px;">
         <q-btn flat round dense icon="menu" :style="{ color: 'var(--od-text-1)' }" class="lt-md" @click="toggleDrawer" />
         <q-toolbar-title style="font-size: 0;" />
 
         <div class="row items-center" style="gap: 4px;">
-          <q-btn flat round dense icon="search"             :style="{ color: 'var(--od-text-3)' }" />
           <q-btn flat round dense icon="notifications_none" :style="{ color: 'var(--od-text-3)' }">
-            <q-badge floating color="negative" style="font-size:9px;" label="3" />
+            <q-badge floating color="negative" label="3" style="font-size:9px;" />
           </q-btn>
           <q-btn
             flat round dense
@@ -20,17 +18,35 @@
           >
             <q-tooltip>{{ isDark ? 'Modo claro' : 'Modo escuro' }}</q-tooltip>
           </q-btn>
+          <q-btn flat round dense style="padding: 2px;">
+            <q-avatar class="header-avatar">{{ userInitial }}</q-avatar>
+            <q-menu anchor="bottom right" self="top right" :offset="[0, 8]" class="user-menu">
+              <div class="user-menu-card">
+                <q-avatar class="user-menu-avatar">{{ userInitial }}</q-avatar>
+                <div class="user-menu-info">
+                  <div class="user-menu-name">{{ userName }}</div>
+                  <span class="user-menu-badge role--aluno">Aluno</span>
+                </div>
+              </div>
+              <q-separator />
+              <q-list style="padding: 4px;">
+                <q-item clickable v-close-popup to="/perfil" class="user-menu-item">
+                  <q-item-section avatar style="min-width: 32px;"><q-icon name="person_outline" size="16px" /></q-item-section>
+                  <q-item-section>Meu perfil</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="handleLogout" class="user-menu-item user-menu-logout">
+                  <q-item-section avatar style="min-width: 32px;"><q-icon name="logout" size="16px" /></q-item-section>
+                  <q-item-section>Sair</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
 
-    <!-- Sidebar -->
-    <AppSidebar
-      :nav-sections="navSections"
-      settings-route="/aluno/configuracoes"
-    />
+    <AppSidebar ref="sidebarRef" :nav-sections="navSections" settings-route="/aluno/configuracoes" />
 
-    <!-- Page -->
     <q-page-container :style="{ background: 'var(--od-bg-page)' }">
       <router-view v-slot="{ Component }">
         <transition name="page" mode="out-in">
@@ -43,32 +59,56 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import AppSidebar from 'components/shared/AppSidebar.vue'
 import { useDarkMode } from 'src/composables/useDarkMode'
+import { useAuth } from 'src/composables/useAuth'
 
-const drawerOpen = ref(true)
-function toggleDrawer () { drawerOpen.value = !drawerOpen.value }
+const sidebarRef = ref(null)
+function toggleDrawer() { sidebarRef.value?.toggle() }
 
 const { isDark, toggle: toggleDark } = useDarkMode()
+const { logout, user } = useAuth()
+const router = useRouter()
+
+const userName = computed(() => user.value?.name || user.value?.email || '')
+const userInitial = computed(() => {
+  const name = user.value?.name || user.value?.email || ''
+  const parts = name.split(' ').filter(Boolean)
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
+  return name.charAt(0).toUpperCase()
+})
+
+function handleLogout() {
+  logout()
+  router.push('/login')
+}
 
 const navSections = [
   {
     label: null,
     items: [
-      { to: '/',                  icon: 'home',        label: 'Página Inicial' },
-      { to: '/aluno/inicio',       icon: 'dashboard',   label: 'Início' },
-      { to: '/aluno/cursos',       icon: 'play_circle', label: 'Meus Cursos',  badge: '3' },
-      { to: '/aluno/explorar',     icon: 'explore',     label: 'Explorar' },
-      { to: '/aluno/certificados', icon: 'workspace_premium', label: 'Certificados' }
+      { to: '/aluno/inicio',       icon: 'dashboard',         label: 'Início' },
+      { to: '/aluno/meus-cursos',  icon: 'play_circle',       label: 'Meus Cursos' },
+      { to: '/aluno/explorar',     icon: 'explore',           label: 'Explorar' },
+      { to: '/aluno/certificados', icon: 'workspace_premium', label: 'Certificados' },
     ]
   },
   {
     label: 'Conta',
     items: [
-      { to: '/aluno/progresso',    icon: 'bar_chart',   label: 'Progresso' },
-      { to: '/aluno/configuracoes',icon: 'settings',    label: 'Configurações' }
+      { to: '/aluno/progresso',     icon: 'bar_chart', label: 'Progresso' },
+      { to: '/aluno/configuracoes', icon: 'settings',  label: 'Configurações' },
     ]
   }
 ]
 </script>
+
+<style scoped>
+.header-avatar {
+  width: 32px; height: 32px;
+  background: var(--od-accent); color: #fff;
+  font-size: 13px; font-weight: 700;
+}
+</style>

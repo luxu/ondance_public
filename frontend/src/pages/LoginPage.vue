@@ -94,15 +94,20 @@ function extractApiError(error, fallback = 'Erro inesperado. Tente novamente.') 
 
 const router = useRouter()
 const $q = useQuasar()
-const { login } = useAuth()
+const { login, user } = useAuth()
 const { initGoogleButton } = useGoogleAuth()
+
+const roleHome = { admin: '/admin/overview', professor: '/professor/dashboard', aluno: '/aluno/inicio' }
+function redirectByRole() {
+  router.push(roleHome[user.value?.role] ?? '/aluno/inicio')
+}
 const formRef = ref(null)
 
 onMounted(() => {
   initGoogleButton('google-login-btn', {
     onSuccess: () => {
       $q.notify({ type: 'positive', message: 'Login com Google realizado!' })
-      router.push('/courses/initial')
+      redirectByRole()
     },
     onError: () => {
       $q.notify({ type: 'negative', message: 'Erro ao autenticar com Google.' })
@@ -130,7 +135,7 @@ async function handleLogin() {
       message: 'Login bem-sucedido! Redirecionando...'
     })
 
-    router.push('/courses/initial')
+    redirectByRole()
   } catch (error) {
     errorMessage.value = extractApiError(error, 'Erro ao efetuar login.')
   } finally {

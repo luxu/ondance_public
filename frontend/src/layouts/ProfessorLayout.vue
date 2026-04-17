@@ -1,24 +1,51 @@
 <template>
   <q-layout view="lHh Lpr lFf">
 
-    <q-header flat style="background: #fff; border-bottom: 0.5px solid rgba(0,0,0,0.08);">
+    <q-header flat :style="{ background: 'var(--od-bg-surface)', borderBottom: '0.5px solid var(--od-border)' }">
       <q-toolbar style="height: 56px; padding: 0 24px;">
-        <q-btn flat round dense icon="menu" style="color: #333;" class="lt-md" @click="toggleDrawer" />
+        <q-btn flat round dense icon="menu" :style="{ color: 'var(--od-text-1)' }" class="lt-md" @click="toggleDrawer" />
         <q-toolbar-title style="font-size: 0;" />
-        <q-btn
-          unelevated
-          class="od-btn-primary"
-          label="+ Novo Curso"
-          no-caps
-          padding="6px 16px"
-          to="/professor/cursos/novo"
-        />
+
+        <div class="row items-center" style="gap: 4px;">
+          <q-btn flat round dense icon="notifications_none" :style="{ color: 'var(--od-text-3)' }" />
+          <q-btn
+            flat round dense
+            :icon="isDark ? 'light_mode' : 'dark_mode'"
+            :style="{ color: 'var(--od-text-3)' }"
+            @click="toggleDark"
+          >
+            <q-tooltip>{{ isDark ? 'Modo claro' : 'Modo escuro' }}</q-tooltip>
+          </q-btn>
+          <q-btn flat round dense style="padding: 2px;">
+            <q-avatar class="header-avatar">{{ userInitial }}</q-avatar>
+            <q-menu anchor="bottom right" self="top right" :offset="[0, 8]" class="user-menu">
+              <div class="user-menu-card">
+                <q-avatar class="user-menu-avatar">{{ userInitial }}</q-avatar>
+                <div class="user-menu-info">
+                  <div class="user-menu-name">{{ userName }}</div>
+                  <span class="user-menu-badge role--professor">Professor</span>
+                </div>
+              </div>
+              <q-separator />
+              <q-list style="padding: 4px;">
+                <q-item clickable v-close-popup to="/perfil" class="user-menu-item">
+                  <q-item-section avatar style="min-width: 32px;"><q-icon name="person_outline" size="16px" /></q-item-section>
+                  <q-item-section>Meu perfil</q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="handleLogout" class="user-menu-item user-menu-logout">
+                  <q-item-section avatar style="min-width: 32px;"><q-icon name="logout" size="16px" /></q-item-section>
+                  <q-item-section>Sair</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
-    <AppSidebar :nav-sections="navSections" />
+    <AppSidebar ref="sidebarRef" :nav-sections="navSections" settings-route="/professor/config" />
 
-    <q-page-container style="background: #F7F6F3;">
+    <q-page-container :style="{ background: 'var(--od-bg-page)' }">
       <router-view v-slot="{ Component }">
         <transition name="page" mode="out-in">
           <component :is="Component" />
@@ -30,28 +57,56 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import AppSidebar from 'components/shared/AppSidebar.vue'
+import { useDarkMode } from 'src/composables/useDarkMode'
+import { useAuth } from 'src/composables/useAuth'
 
-const drawerOpen = ref(true)
-function toggleDrawer () { drawerOpen.value = !drawerOpen.value }
+const sidebarRef = ref(null)
+function toggleDrawer() { sidebarRef.value?.toggle() }
+
+const { isDark, toggle: toggleDark } = useDarkMode()
+const { logout, user } = useAuth()
+const router = useRouter()
+
+const userName = computed(() => user.value?.name || user.value?.email || '')
+const userInitial = computed(() => {
+  const name = user.value?.name || user.value?.email || ''
+  const parts = name.split(' ').filter(Boolean)
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
+  return name.charAt(0).toUpperCase()
+})
+
+function handleLogout() {
+  logout()
+  router.push('/login')
+}
 
 const navSections = [
   {
     label: null,
     items: [
-      { to: '/professor/dashboard', icon: 'dashboard',    label: 'Dashboard' },
-      { to: '/professor/cursos',    icon: 'video_library',label: 'Meus Cursos', badge: '5' },
-      { to: '/professor/cursos/novo',icon: 'add_circle',  label: 'Criar Curso' },
-      { to: '/professor/students',    icon: 'group',        label: 'Students', badge: '42' }
+      { to: '/professor/dashboard',    icon: 'dashboard',     label: 'Dashboard' },
+      { to: '/professor/cursos',        icon: 'video_library', label: 'Meus Cursos' },
+      { to: '/professor/cursos/novo',   icon: 'add_circle',    label: 'Criar Curso' },
+      { to: '/professor/alunos',        icon: 'group',         label: 'Meus Alunos' },
     ]
   },
   {
     label: 'Finanças',
     items: [
-      { to: '/professor/ganhos',    icon: 'payments',     label: 'Ganhos' },
-      { to: '/professor/config',    icon: 'settings',     label: 'Configurações' }
+      { to: '/professor/ganhos', icon: 'payments', label: 'Ganhos' },
+      { to: '/professor/config', icon: 'settings', label: 'Configurações' },
     ]
   }
 ]
 </script>
+
+<style scoped>
+.header-avatar {
+  width: 32px; height: 32px;
+  background: var(--od-accent); color: #fff;
+  font-size: 13px; font-weight: 700;
+}
+</style>
