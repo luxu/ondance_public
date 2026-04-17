@@ -56,6 +56,17 @@
                 :style="inputStyle"
               />
 
+              <q-select
+                v-model="selectedState"
+                :options="stateOptions"
+                label="Estado"
+                outlined dense
+                emit-value map-options
+                popup-content-style="max-height:250px;overflow-y:auto"
+                :style="inputStyle"
+                @update:model-value="onStateChange"
+              />
+
               <q-input
                 v-model="form.celular"
                 label="Celular"
@@ -84,24 +95,18 @@
               />
 
               <q-select
-                v-model="selectedState"
-                :options="stateOptions"
-                label="Estado"
-                outlined dense
-                emit-value map-options
-                :style="inputStyle"
-                @update:model-value="onStateChange"
-              />
-
-              <q-select
                 v-model="form.city"
-                :options="cityOptions"
+                :options="filteredCityOptions"
                 label="Cidade"
                 outlined dense
+                use-input
+                input-debounce="300"
                 emit-value map-options
+                popup-content-style="max-height:250px;overflow-y:auto"
                 :disable="!selectedState || loadingCities"
                 :loading="loadingCities"
                 :style="inputStyle"
+                @filter="filterCities"
               />
 
             </div>
@@ -133,7 +138,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { profileService } from 'src/services/profile'
 import { stateService } from 'src/services/state'
 import { cityService } from 'src/services/city'
@@ -173,6 +178,27 @@ const cityOptions = computed(() =>
   cities.value.map(c => ({ label: c.name, value: c.id }))
 )
 
+const filteredCityOptions = ref([])
+
+watch(cityOptions, (opts) => { filteredCityOptions.value = opts }, { immediate: true })
+
+async function filterCities(val, update, abort) {
+  if (!val || val.length < 2) {
+    update(() => { filteredCityOptions.value = cityOptions.value })
+    return
+  }
+  try {
+    const { data } = await cityService.list({ state: selectedState.value, search: val, page_size: 50 })
+    const results = data.results ?? data
+    update(() => {
+      filteredCityOptions.value = results.map(c => ({ label: c.name, value: c.id }))
+    })
+  } catch {
+    abort()
+  }
+}
+
+
 onMounted(async () => {
   await Promise.all([loadProfile(), loadStates()])
 })
@@ -191,6 +217,10 @@ async function loadProfile() {
     if (data.city_detail?.state) {
       selectedState.value = data.city_detail.state
       await loadCities(data.city_detail.state)
+      // garante que a cidade salva está na lista mesmo que fora da primeira página
+      if (data.city && !cities.value.find(c => c.id === data.city)) {
+        cities.value.push({ id: data.city, name: data.city_detail.name })
+      }
     }
   } catch {
     // silencia

@@ -130,7 +130,10 @@ SITE_ID = 1
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_ADAPTER = 'api.adapters.AccountAdapter'
+FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:3000')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', default='')
 

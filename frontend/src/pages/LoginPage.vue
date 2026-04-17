@@ -87,6 +87,7 @@ import { useGoogleAuth } from 'src/composables/useGoogleAuth'
 function extractApiError(error, fallback = 'Erro inesperado. Tente novamente.') {
   const data = error.response?.data
   if (!data) return fallback
+  if (data.message) return data.message
   const messages = [...new Set(Object.values(data).flat())]
   return messages.length ? messages.join(' ') : fallback
 }

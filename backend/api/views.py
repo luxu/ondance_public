@@ -4,6 +4,7 @@ from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 
 from api.serializers import (
@@ -32,6 +33,13 @@ class UserCreate(generics.CreateAPIView):
     serializer_class = UserSerializer
     throttle_classes = [RegisterThrottle]
 
+    def perform_create(self, serializer):
+        user = serializer.save()
+        email_address = EmailAddress.objects.create(
+            user=user, email=user.email, primary=True, verified=False
+        )
+        email_address.send_confirmation(self.request, signup=True)
+
 create_user = UserCreate.as_view()
 
 
@@ -43,6 +51,9 @@ class CityList(generics.ListAPIView):
         state = self.request.query_params.get('state')
         if state:
             qs = qs.filter(state__abbreviation__iexact=state)
+        search = self.request.query_params.get('search', '').strip()
+        if search:
+            qs = qs.filter(name__icontains=search)
         return qs
 
 
@@ -128,6 +139,12 @@ class GoogleSocialAuthView(APIView):
                 user.is_teacher = (role == 'professor')
                 user.is_student = (role == 'aluno')
                 user.save()
+                EmailAddress.objects.create(
+                    user=user,
+                    email=user.email,
+                    primary=True,
+                    verified=True,
+                )
             Profile.objects.get_or_create(
                 user=user,
                 defaults={'name': google_name},
@@ -155,12 +172,14 @@ class ProfileView(APIView):
     parser_classes = [MultiPartParser, JSONParser]
 
     def get(self, request):
-        serializer = ProfileSerializer(request.user.profile, context={'request': request})
+        profile, _ = Profile.objects.get_or_create(user=request.user)
+        serializer = ProfileSerializer(profile, context={'request': request})
         return Response(serializer.data)
 
     def patch(self, request):
+        profile, _ = Profile.objects.get_or_create(user=request.user)
         serializer = ProfileSerializer(
-            request.user.profile,
+            profile,
             data=request.data,
             partial=True,
             context={'request': request},

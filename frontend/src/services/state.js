@@ -1,7 +1,7 @@
 import { api } from 'boot/axios'
 
 export const stateService = {
-  list(search) {
-    return api.get('/states/', { params: search ? { search } : {} })
+  list(params) {
+    return api.get('/states/', { params: { page_size: 100, ...params } })
   }
 }
