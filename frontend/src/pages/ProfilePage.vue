@@ -114,9 +114,6 @@
             <div v-if="errorMsg" style="margin-top: 12px; font-size: 13px; color: #e53935;">
               {{ errorMsg }}
             </div>
-            <div v-if="successMsg" style="margin-top: 12px; font-size: 13px; color: #1D9E75;">
-              {{ successMsg }}
-            </div>
 
           </q-card-section>
 
@@ -139,15 +136,23 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import { profileService } from 'src/services/profile'
 import { stateService } from 'src/services/state'
 import { cityService } from 'src/services/city'
+import { useAuth } from 'src/composables/useAuth'
+
+const $q = useQuasar()
+const router = useRouter()
+const { user } = useAuth()
+
+const roleHome = { admin: '/admin/overview', professor: '/professor/dashboard', aluno: '/aluno/inicio' }
 
 const fileInput = ref(null)
 const loading = ref(false)
 const loadingCities = ref(false)
 const errorMsg = ref('')
-const successMsg = ref('')
 const photoFile = ref(null)
 const photoPreview = ref(null)
 const states = ref([])
@@ -266,7 +271,6 @@ function onFileChange(event) {
 async function save() {
   loading.value = true
   errorMsg.value = ''
-  successMsg.value = ''
 
   try {
     const fd = new FormData()
@@ -279,8 +283,9 @@ async function save() {
 
     const { data } = await profileService.update(fd)
     localStorage.setItem('profile_complete', data.profile_complete ? 'true' : 'false')
-    successMsg.value = 'Perfil atualizado com sucesso!'
     photoFile.value = null
+    $q.notify({ type: 'positive', message: 'Perfil atualizado com sucesso!', position: 'top', timeout: 2000 })
+    router.push(roleHome[user.value?.role] ?? '/aluno/inicio')
   } catch {
     errorMsg.value = 'Erro ao salvar. Tente novamente.'
   } finally {
