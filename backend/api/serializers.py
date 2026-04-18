@@ -15,6 +15,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['role'] = user.role
         token['name'] = getattr(user, 'profile', None) and user.profile.name or ''
+        token['email'] = user.email
         return token
 
 
@@ -105,6 +106,34 @@ class CourseSerializer(serializers.ModelSerializer):
         slug_field='email',
         queryset=User.objects.all(),
     )
+
+    class Meta:
+        model = Course
+        fields = ['id', 'title', 'teacher', 'is_published', 'status']
+        read_only_fields = ['id', 'is_published', 'status']
+
+
+class TeacherDetailSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
+
+    def get_name(self, obj):
+        return getattr(getattr(obj, 'profile', None), 'name', '') or ''
+
+    def get_photo(self, obj):
+        profile = getattr(obj, 'profile', None)
+        if not profile or not profile.photo:
+            return None
+        request = self.context.get('request')
+        return request.build_absolute_uri(profile.photo.url) if request else profile.photo.url
+
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'name', 'photo']
+
+
+class PublishedCourseSerializer(serializers.ModelSerializer):
+    teacher = TeacherDetailSerializer(read_only=True)
 
     class Meta:
         model = Course

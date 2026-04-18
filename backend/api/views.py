@@ -13,6 +13,7 @@ from api.serializers import (
     GoogleSocialAuthSerializer,
     PasswordChangeSerializer,
     ProfileSerializer,
+    PublishedCourseSerializer,
     StateSerializer,
     UserSerializer,
 )
@@ -90,6 +91,38 @@ class CourseListCreate(generics.ListCreateAPIView):
 
 
 courses = CourseListCreate.as_view()
+
+
+class PublishedCourseList(generics.ListAPIView):
+    serializer_class = PublishedCourseSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return (
+            Course.objects
+            .select_related('teacher__profile')
+            .filter(is_published=True)
+            .order_by('title')
+        )
+
+
+published_courses = PublishedCourseList.as_view()
+
+
+class TeacherCourseList(generics.ListAPIView):
+    serializer_class = CourseSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return (
+            Course.objects
+            .select_related('teacher')
+            .filter(teacher=self.request.user)
+            .order_by('title')
+        )
+
+
+teacher_courses = TeacherCourseList.as_view()
 
 
 class PasswordChangeView(APIView):
