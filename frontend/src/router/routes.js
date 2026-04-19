@@ -50,6 +50,7 @@ const adminRoutes = {
 const profileRoute = {
   path: '/perfil',
   component: () => import('layouts/CoursesLayout.vue'),
+  meta: { role: ['aluno', 'professor'] },
   children: [
     { path: '', name: 'profile', component: () => import('pages/ProfilePage.vue') }
   ]

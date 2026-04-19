@@ -30,10 +30,6 @@
               </div>
               <q-separator />
               <q-list style="padding: 4px;">
-                <q-item clickable v-close-popup to="/perfil" class="user-menu-item">
-                  <q-item-section avatar style="min-width: 32px;"><q-icon name="person_outline" size="16px" /></q-item-section>
-                  <q-item-section>Meu perfil</q-item-section>
-                </q-item>
                 <q-item clickable v-close-popup @click="handleLogout" class="user-menu-item user-menu-logout">
                   <q-item-section avatar style="min-width: 32px;"><q-icon name="logout" size="16px" /></q-item-section>
                   <q-item-section>Sair</q-item-section>
