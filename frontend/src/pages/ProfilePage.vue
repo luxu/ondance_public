@@ -147,7 +147,7 @@ const $q = useQuasar()
 const router = useRouter()
 const { user } = useAuth()
 
-const roleHome = { admin: '/admin/overview', professor: '/professor/dashboard', aluno: '/aluno/inicio' }
+const roleHome = { admin: '/admin/overview', professor: '/teacher/dashboard', aluno: '/student/dashboard' }
 
 const fileInput = ref(null)
 const loading = ref(false)
@@ -285,7 +285,7 @@ async function save() {
     localStorage.setItem('profile_complete', data.profile_complete ? 'true' : 'false')
     photoFile.value = null
     $q.notify({ type: 'positive', message: 'Perfil atualizado com sucesso!', position: 'top', timeout: 2000 })
-    router.push(roleHome[user.value?.role] ?? '/aluno/inicio')
+    router.push(roleHome[user.value?.role] ?? '/student/dashboard')
   } catch {
     errorMsg.value = 'Erro ao salvar. Tente novamente.'
   } finally {

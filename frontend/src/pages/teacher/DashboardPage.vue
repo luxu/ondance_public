@@ -36,7 +36,7 @@
           <q-card-section>
             <div class="row items-center justify-between q-mb-md">
               <div class="od-card-title od-display">Meus cursos recentes</div>
-              <q-btn flat no-caps label="ver todos →" style="color: var(--od-accent); font-size: 12px;" to="/professor/cursos" />
+              <q-btn flat no-caps label="ver todos →" style="color: var(--od-accent); font-size: 12px;" to="/teacher/courses" />
             </div>
 
             <!-- Loading -->
@@ -54,7 +54,7 @@
             <!-- Sem cursos -->
             <div v-else-if="courses.length === 0" class="text-center q-py-md">
               <p style="font-size: 13px; color: var(--od-text-4);">Nenhum curso criado ainda.</p>
-              <q-btn flat no-caps label="Criar primeiro curso" to="/professor/cursos/novo" style="color: var(--od-accent); font-size: 12px;" />
+              <q-btn flat no-caps label="Criar primeiro curso" to="/teacher/courses/new" style="color: var(--od-accent); font-size: 12px;" />
             </div>
 
             <!-- Lista real -->

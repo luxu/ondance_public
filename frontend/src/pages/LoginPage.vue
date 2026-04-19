@@ -97,9 +97,9 @@ const $q = useQuasar()
 const { login, user } = useAuth()
 const { initGoogleButton } = useGoogleAuth()
 
-const roleHome = { admin: '/admin/overview', professor: '/professor/dashboard', aluno: '/aluno/inicio' }
+const roleHome = { admin: '/admin/overview', professor: '/teacher/dashboard', aluno: '/student/dashboard' }
 function redirectByRole() {
-  router.push(roleHome[user.value?.role] ?? '/aluno/inicio')
+  router.push(roleHome[user.value?.role] ?? '/student/dashboard')
 }
 const formRef = ref(null)
 

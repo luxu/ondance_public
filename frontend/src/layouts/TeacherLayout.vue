@@ -43,7 +43,7 @@
       </q-toolbar>
     </q-header>
 
-    <AppSidebar ref="sidebarRef" :nav-sections="navSections" settings-route="/professor/config" />
+    <AppSidebar ref="sidebarRef" :nav-sections="navSections" settings-route="/teacher/config" />
 
     <q-page-container :style="{ background: 'var(--od-bg-page)' }">
       <router-view v-slot="{ Component }">
@@ -87,17 +87,17 @@ const navSections = [
   {
     label: null,
     items: [
-      { to: '/professor/dashboard',    icon: 'dashboard',     label: 'Dashboard' },
-      { to: '/professor/cursos',        icon: 'video_library', label: 'Meus Cursos' },
-      { to: '/professor/cursos/novo',   icon: 'add_circle',    label: 'Criar Curso' },
-      { to: '/professor/alunos',        icon: 'group',         label: 'Meus Alunos' },
+      { to: '/teacher/dashboard',    icon: 'dashboard',     label: 'Dashboard'   },
+      { to: '/teacher/courses',      icon: 'video_library', label: 'Meus Cursos' },
+      { to: '/teacher/courses/new',  icon: 'add_circle',    label: 'Criar Curso' },
+      { to: '/teacher/students',     icon: 'group',         label: 'Meus Alunos' },
     ]
   },
   {
     label: 'Finanças',
     items: [
-      { to: '/professor/ganhos', icon: 'payments', label: 'Ganhos' },
-      { to: '/professor/config', icon: 'settings', label: 'Configurações' },
+      { to: '/teacher/ganhos', icon: 'payments', label: 'Ganhos' },
+      { to: '/teacher/config', icon: 'settings', label: 'Configurações' },
     ]
   }
 ]

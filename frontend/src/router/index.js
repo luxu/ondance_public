@@ -22,8 +22,8 @@ function parseRole(token) {
 
 const roleHome = {
   admin:     '/admin/overview',
-  professor: '/professor/dashboard',
-  aluno:     '/aluno/inicio',
+  professor: '/teacher/dashboard',
+  aluno:     '/student/dashboard',
 }
 
 router.beforeEach((to) => {
@@ -34,14 +34,14 @@ router.beforeEach((to) => {
   const role = parseRole(token)
 
   if (token && to.meta.guest && (to.name === 'login' || to.name === 'register')) {
-    return roleHome[role] ?? '/aluno/inicio'
+    return roleHome[role] ?? '/student/dashboard'
   }
 
   if (to.meta.role) {
     const allowed = Array.isArray(to.meta.role) ? to.meta.role : [to.meta.role]
     // admin acessa tudo
     if (role !== 'admin' && !allowed.includes(role)) {
-      return roleHome[role] ?? '/aluno/inicio'
+      return roleHome[role] ?? '/student/dashboard'
     }
   }
 

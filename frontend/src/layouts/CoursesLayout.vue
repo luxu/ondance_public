@@ -121,11 +121,10 @@ const navSections = [
   {
     label: null,
     items: [
-      { to: '/',                  icon: 'home',             label: 'Página Inicial' },
-      { to: '/courses/initial',      icon: 'dashboard',        label: 'Início' },
-      { to: '/courses/lista',        icon: 'list_alt',         label: 'Cursos' },
-      { to: '/courses/new',         icon: 'add_circle',       label: 'Novo Curso' },
-      { to: '/courses/categorias',   icon: 'category',         label: 'Categorias' },
+      { to: '/student/dashboard',    icon: 'dashboard',         label: 'Dashboard' },
+      { to: '/student/my-courses',  icon: 'play_circle',       label: 'Meus Cursos' },
+      { to: '/student/explorar',     icon: 'explore',           label: 'Explorar' },
+      { to: '/student/certificados', icon: 'workspace_premium', label: 'Certificados' },
     ]
   },
   {
