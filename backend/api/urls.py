@@ -17,6 +17,7 @@ urlpatterns = [
     path('courses/', views.courses, name='courses'),
     path('courses/published/', views.published_courses, name='published-courses'),
     path('courses/mine/', views.teacher_courses, name='teacher-courses'),
+    path('courses/<uuid:pk>/', views.course_detail, name='course-detail'),
     path('cities/', views.cities, name='cities'),
     path('states/', views.states, name='states'),
     path('auth/social/google/', views.google_social_auth, name='social_auth_google'),

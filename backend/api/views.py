@@ -128,6 +128,17 @@ class TeacherCourseList(generics.ListAPIView):
 teacher_courses = TeacherCourseList.as_view()
 
 
+class CourseDetail(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CourseSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Course.objects.select_related('teacher').filter(teacher=self.request.user)
+
+
+course_detail = CourseDetail.as_view()
+
+
 class PasswordChangeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
