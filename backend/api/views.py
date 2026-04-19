@@ -10,7 +10,9 @@ from allauth.socialaccount.models import SocialAccount
 
 from api.serializers import (
     AdminCourseSerializer,
+    AdminUserSerializer,
     CitySerializer,
+    TeacherStudentSerializer,
     CourseSerializer,
     GoogleSocialAuthSerializer,
     PasswordChangeSerializer,
@@ -20,7 +22,7 @@ from api.serializers import (
     UserSerializer,
 )
 from api.throttles import RegisterThrottle, SocialAuthThrottle
-from course.models import Course
+from course.models import Course, UserCourse
 from user.models import City, Profile, State, User
 
 
@@ -182,6 +184,46 @@ class AdminCourseReject(APIView):
 
 
 admin_course_reject = AdminCourseReject.as_view()
+
+
+class AdminUserList(generics.ListAPIView):
+    serializer_class = AdminUserSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def get_queryset(self):
+        qs = Profile.objects.select_related('user', 'city__state').filter(user__is_staff=False).order_by('name')
+        role = self.request.query_params.get('role')
+        if role == 'professor':
+            qs = qs.filter(user__is_teacher=True)
+        elif role == 'aluno':
+            qs = qs.filter(user__is_teacher=False)
+        search = self.request.query_params.get('search', '').strip()
+        if search:
+            qs = qs.filter(name__icontains=search) | qs.filter(user__email__icontains=search)
+        return qs
+
+
+admin_user_list = AdminUserList.as_view()
+
+
+class TeacherStudentList(generics.ListAPIView):
+    serializer_class = TeacherStudentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        qs = (
+            UserCourse.objects
+            .select_related('profile__user', 'course')
+            .filter(course__teacher=self.request.user)
+            .order_by('profile__name', 'course__title')
+        )
+        course_id = self.request.query_params.get('course_id')
+        if course_id:
+            qs = qs.filter(course__id=course_id)
+        return qs
+
+
+teacher_students = TeacherStudentList.as_view()
 
 
 class PasswordChangeView(APIView):

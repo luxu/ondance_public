@@ -11,4 +11,11 @@ export const profileService = {
       headers: isFormData ? { 'Content-Type': undefined } : {},
     })
   },
+
+  adminList({ role = null, search = '' } = {}) {
+    const params = {}
+    if (role) params.role = role
+    if (search) params.search = search
+    return api.get('/admin/users/', { params })
+  },
 }

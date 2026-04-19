@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from course.models import Course
+from course.models import Course, UserCourse
 from user.models import City, Profile, State, User
 
 
@@ -145,6 +145,46 @@ class AdminCourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ['id', 'title', 'teacher', 'status', 'is_published']
         read_only_fields = ['id', 'title', 'teacher', 'is_published']
+
+
+class TeacherStudentSerializer(serializers.ModelSerializer):
+    student_name = serializers.SerializerMethodField()
+    student_email = serializers.SerializerMethodField()
+    student_photo = serializers.SerializerMethodField()
+    course_id = serializers.UUIDField(source='course.id', read_only=True)
+    course_title = serializers.CharField(source='course.title', read_only=True)
+
+    def get_student_name(self, obj):
+        return obj.profile.name or ''
+
+    def get_student_email(self, obj):
+        return obj.profile.user.email
+
+    def get_student_photo(self, obj):
+        if not obj.profile.photo:
+            return None
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.profile.photo.url) if request else obj.profile.photo.url
+
+    class Meta:
+        model = UserCourse
+        fields = [
+            'id', 'student_name', 'student_email', 'student_photo',
+            'course_id', 'course_title', 'started_at', 'is_completed',
+        ]
+
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
+    role = serializers.SerializerMethodField()
+    city_detail = CitySerializer(source='city', read_only=True)
+
+    def get_role(self, obj):
+        return obj.user.role
+
+    class Meta:
+        model = Profile
+        fields = ['email', 'name', 'photo', 'role', 'city_detail']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
