@@ -45,7 +45,7 @@
       </q-toolbar>
     </q-header>
 
-    <AppSidebar ref="sidebarRef" :nav-sections="navSections" settings-route="/aluno/configuracoes" />
+    <AppSidebar ref="sidebarRef" :nav-sections="navSections" settings-route="/student/configuracoes" />
 
     <q-page-container :style="{ background: 'var(--od-bg-page)' }">
       <router-view v-slot="{ Component }">
@@ -89,17 +89,17 @@ const navSections = [
   {
     label: null,
     items: [
-      { to: '/aluno/inicio',       icon: 'dashboard',         label: 'Início' },
-      { to: '/aluno/meus-cursos',  icon: 'play_circle',       label: 'Meus Cursos' },
-      { to: '/aluno/explorar',     icon: 'explore',           label: 'Explorar' },
-      { to: '/aluno/certificados', icon: 'workspace_premium', label: 'Certificados' },
+      { to: '/student/dashboard',    icon: 'dashboard',         label: 'Dashboard' },
+      { to: '/student/my-courses',  icon: 'play_circle',       label: 'Meus Cursos' },
+      { to: '/student/explorar',     icon: 'explore',           label: 'Explorar' },
+      { to: '/student/certificados', icon: 'workspace_premium', label: 'Certificados' },
     ]
   },
   {
     label: 'Conta',
     items: [
-      { to: '/aluno/progresso',     icon: 'bar_chart', label: 'Progresso' },
-      { to: '/aluno/configuracoes', icon: 'settings',  label: 'Configurações' },
+      { to: '/student/progresso',     icon: 'bar_chart', label: 'Progresso' },
+      { to: '/student/configuracoes', icon: 'settings',  label: 'Configurações' },
     ]
   }
 ]

@@ -27,12 +27,21 @@
                   label="Título *"
                   :rules="[val => !!val || 'Campo obrigatório']"
                 />
-                <q-input
-                  v-model="form.teacher"
-                  outlined dense
-                  label="Professor *"
-                  :rules="[val => !!val || 'Campo obrigatório']"
-                />
+                <div
+                  class="row items-center no-wrap"
+                  style="gap: 10px; padding: 10px 12px; border: 1px solid var(--od-border); border-radius: 4px; background: var(--od-bg-subtle);"
+                >
+                  <q-avatar size="32px" style="flex-shrink: 0; background: var(--od-accent);">
+                    <span style="color: #fff; font-size: 13px; font-weight: 600;">{{ teacherInitials }}</span>
+                  </q-avatar>
+                  <div style="min-width: 0;">
+                    <div style="font-size: 13px; font-weight: 500; color: var(--od-text-1);">
+                      {{ user.name || user.email }}
+                    </div>
+                    <div style="font-size: 11px; color: var(--od-text-4);">Professor · {{ user.email }}</div>
+                  </div>
+                  <q-icon name="lock" size="14px" style="color: var(--od-text-5); margin-left: auto; flex-shrink: 0;" />
+                </div>
                 <q-input
                   v-model="form.description"
                   outlined dense
@@ -188,7 +197,7 @@
               {{ form.title || 'Título do curso' }}
             </div>
             <div style="font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 10px;">
-              {{ form.teacher || 'Professor' }}
+              {{ user.name || user.email || 'Professor' }}
             </div>
             <div style="font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.9;">
               <div v-if="form.level">Nível: {{ form.level }}</div>
@@ -245,7 +254,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useAuth } from 'src/composables/useAuth'
@@ -260,16 +269,14 @@ let nextId = 1
 
 const form = ref({
   title:       '',
-  teacher:     '',
   description: '',
   duration:    '',
   level:       null,
 })
 
-onMounted(() => {
-  if (user.value?.email) {
-    form.value.teacher = user.value.email
-  }
+const teacherInitials = computed(() => {
+  const str = user.value?.name || user.value?.email || ''
+  return str.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?'
 })
 
 const modules = ref([])
@@ -282,7 +289,7 @@ const totalLessons = computed(() =>
 
 const checklist = computed(() => [
   { label: 'Título preenchido',     done: !!form.value.title },
-  { label: 'Professor definido',    done: !!form.value.teacher },
+  { label: 'Professor definido',    done: !!user.value?.email },
   { label: 'Descrição adicionada',  done: !!form.value.description },
   { label: 'Nível selecionado',     done: !!form.value.level },
   { label: 'Ao menos 1 módulo',     done: modules.value.length > 0 },
@@ -313,10 +320,7 @@ function saveDraft () {
 async function handleSubmit () {
   saving.value = true
   try {
-    await courseService.create({
-      title:   form.value.title,
-      teacher: user.value?.email ?? form.value.teacher,
-    })
+    await courseService.create({ title: form.value.title })
     $q.notify({ type: 'positive', message: 'Curso publicado com sucesso!', position: 'top', timeout: 2500 })
     router.push('/professor/cursos')
   } catch (err) {
