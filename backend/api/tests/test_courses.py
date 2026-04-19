@@ -66,16 +66,14 @@ def test_autenticado_ve_cursos_nao_publicados(api_client, user, draft_course):
 # ── Criação (POST) ─────────────────────────────────────────────────────────
 
 
-def test_post_requer_autenticacao(api_client, teacher):
-    payload = {'title': 'Contemporâneo', 'teacher': teacher.email}
-    resp = api_client.post(COURSES_URL, data=payload, format='json')
+def test_post_requer_autenticacao(api_client):
+    resp = api_client.post(COURSES_URL, data={'title': 'Contemporâneo'}, format='json')
     assert resp.status_code == 401
 
 
-def test_cria_course_com_defaults(api_client, user, teacher):
-    api_client.force_authenticate(user=user)
-    payload = {'title': 'Contemporâneo', 'teacher': teacher.email}
-    resp = api_client.post(COURSES_URL, data=payload, format='json')
+def test_cria_course_com_defaults(api_client, teacher):
+    api_client.force_authenticate(user=teacher)
+    resp = api_client.post(COURSES_URL, data={'title': 'Contemporâneo'}, format='json')
     assert resp.status_code == 201
     body = resp.json()
     assert body['title'] == 'Contemporâneo'
@@ -84,20 +82,13 @@ def test_cria_course_com_defaults(api_client, user, teacher):
     assert body['status'] == 'PENDING'
 
 
-def test_cria_course_persiste_no_banco(api_client, user, teacher):
-    api_client.force_authenticate(user=user)
-    payload = {'title': 'Forró Universitário', 'teacher': teacher.email}
-    api_client.post(COURSES_URL, data=payload, format='json')
+def test_cria_course_persiste_no_banco(api_client, teacher):
+    api_client.force_authenticate(user=teacher)
+    api_client.post(COURSES_URL, data={'title': 'Forró Universitário'}, format='json')
     assert Course.objects.filter(title='Forró Universitário').exists()
 
 
-def test_post_sem_title_retorna_400(api_client, user, teacher):
-    api_client.force_authenticate(user=user)
-    resp = api_client.post(COURSES_URL, data={'teacher': teacher.email}, format='json')
-    assert resp.status_code == 400
-
-
-def test_post_sem_teacher_retorna_400(api_client, user):
-    api_client.force_authenticate(user=user)
-    resp = api_client.post(COURSES_URL, data={'title': 'Salsa'}, format='json')
+def test_post_sem_title_retorna_400(api_client, teacher):
+    api_client.force_authenticate(user=teacher)
+    resp = api_client.post(COURSES_URL, data={}, format='json')
     assert resp.status_code == 400

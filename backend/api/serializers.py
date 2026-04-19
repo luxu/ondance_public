@@ -102,15 +102,12 @@ class CitySerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    teacher = serializers.SlugRelatedField(
-        slug_field='email',
-        queryset=User.objects.all(),
-    )
+    teacher = serializers.SlugRelatedField(slug_field='email', read_only=True)
 
     class Meta:
         model = Course
         fields = ['id', 'title', 'teacher', 'is_published', 'status']
-        read_only_fields = ['id', 'is_published', 'status']
+        read_only_fields = ['id', 'teacher', 'is_published', 'status']
 
 
 class TeacherDetailSerializer(serializers.ModelSerializer):

@@ -89,6 +89,9 @@ class CourseListCreate(generics.ListCreateAPIView):
             qs = qs.filter(is_published=True)
         return qs
 
+    def perform_create(self, serializer):
+        serializer.save(teacher=self.request.user)
+
 
 courses = CourseListCreate.as_view()
 
