@@ -38,6 +38,7 @@ INSTALLED_APPS = APPS_DEFAULT + THIRD_PARTY_APPS + PERSONAL_APPS
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -149,3 +150,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Onde o Django vai JUNTAR tudo para a produção (Pasta física)
 STATIC_ROOT = '/home/ondance_public/backend/staticfiles'
+
+# Opcional: Adiciona compressão e cache de longo prazo (recomendado)
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
