@@ -200,7 +200,7 @@ async function handleLogin() {
   border-radius: 16px;
   padding: 14px 0;
   font-weight: 700;
-  box-shadow: 0 10px 20px rgba(123, 94, 167, 0.22);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
 }
 
 
@@ -263,6 +263,6 @@ async function handleLogin() {
 }
 
 :deep(.login-input .q-field__border) {
-  border-color: rgba(123, 94, 167, 0.3) !important;
+  border-color: rgba(37, 99, 235, 0.3) !important;
 }
 </style>
