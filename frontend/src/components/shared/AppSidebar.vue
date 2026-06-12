@@ -8,8 +8,7 @@
   >
     <!-- Logo -->
     <div class="od-logo q-px-lg q-pt-lg q-pb-md">
-      <span class="od-logo-dot" />
-      <a href="/">On Dance</a>
+      <img src="/logo-abcaa.png" alt="ABCAA" style="height: 32px; width: auto;" />
     </div>
 
     <!-- Nav Items -->
@@ -123,13 +122,13 @@ defineExpose({ toggle: () => { drawerOpen.value = !drawerOpen.value } })
   gap: 10px;
   padding: 8px 10px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.04);
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .user-pill:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .user-pill-avatar {
@@ -151,7 +150,7 @@ defineExpose({ toggle: () => { drawerOpen.value = !drawerOpen.value } })
 .user-pill-name {
   font-size: 12.5px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--od-text-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -168,22 +167,54 @@ defineExpose({ toggle: () => { drawerOpen.value = !drawerOpen.value } })
 }
 
 .role--aluno {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+}
+
+.role--professor {
+  background: rgba(139, 92, 246, 0.12);
+  color: #7c3aed;
+}
+
+.role--admin {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.user-pill-logout {
+  color: var(--od-text-4) !important;
+  flex-shrink: 0;
+}
+
+/* Dark mode overrides */
+.body--dark .user-pill {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.body--dark .user-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.body--dark .user-pill-name {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.body--dark .role--aluno {
   background: rgba(56, 189, 248, 0.18);
   color: #7dd3fc;
 }
 
-.role--professor {
+.body--dark .role--professor {
   background: rgba(167, 139, 250, 0.2);
   color: #c4b5fd;
 }
 
-.role--admin {
+.body--dark .role--admin {
   background: rgba(252, 165, 165, 0.18);
   color: #fca5a5;
 }
 
-.user-pill-logout {
+.body--dark .user-pill-logout {
   color: rgba(255, 255, 255, 0.3) !important;
-  flex-shrink: 0;
 }
 </style>

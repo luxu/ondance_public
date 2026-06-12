@@ -1,8 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
 
-    <q-header flat :style="{ background: 'var(--od-bg-surface)', borderBottom: '0.5px solid var(--od-border)' }">
-      <q-toolbar style="height: 56px; padding: 0 24px;">
+    <q-header flat :style="{ background: 'var(--od-bg-surface)', borderBottom: '1px solid var(--od-border)' }">
+      <q-toolbar style="height: 56px; padding: 0 24px; font-family: 'Poppins', sans-serif;">
         <q-btn flat round dense icon="menu" :style="{ color: 'var(--od-text-1)' }" class="lt-md" @click="toggleDrawer" />
         <q-toolbar-title style="font-size: 0;" />
 

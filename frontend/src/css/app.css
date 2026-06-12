@@ -1,53 +1,60 @@
 /* =============================================
    OnDance — Design Tokens & Global Styles
+   Inspirado no visual ABCAA (Lovable)
    ============================================= */
 
-/* === Light mode (default) === */
+/* === Light mode (default) — estilo ABCAA === */
 :root {
-  --od-accent:        #7B5EA7;
+  --od-accent:        #2563eb;
 
-  --od-bg-page:       #F7F6F3;
-  --od-bg-surface:    #FFFFFF;
-  --od-bg-subtle:     #F0EFE9;
+  --od-bg-page:       #ffffff;
+  --od-bg-surface:    #ffffff;
+  --od-bg-subtle:     #f8fafc;
   --od-bg-hover:      rgba(0, 0, 0, 0.03);
 
-  --od-text-1:        #1a1a1a;
-  --od-text-2:        #444444;
-  --od-text-3:        #888888;
-  --od-text-4:        #aaaaaa;
-  --od-text-5:        #cccccc;
+  --od-text-1:        #111827;
+  --od-text-2:        #374151;
+  --od-text-3:        #6b7280;
+  --od-text-4:        #9ca3af;
+  --od-text-5:        #d1d5db;
 
   --od-border:        rgba(0, 0, 0, 0.08);
   --od-border-light:  rgba(0, 0, 0, 0.05);
 
-  --od-sidebar-bg:    #16141D;
+  --od-sidebar-bg:    #f8fafc;
 }
 
-/* === Dark mode === */
+/* === Dark mode — adaptado do ABCAA === */
 .body--dark {
-  --od-bg-page:       #111111;
-  --od-bg-surface:    #1c1c1e;
-  --od-bg-subtle:     #2a2a2e;
+  --od-accent:        #3b82f6;
+
+  --od-bg-page:       #0f172a;
+  --od-bg-surface:    #1e293b;
+  --od-bg-subtle:     #334155;
   --od-bg-hover:      rgba(255, 255, 255, 0.04);
 
-  --od-text-1:        #f0f0f0;
-  --od-text-2:        #c0c0c0;
-  --od-text-3:        #909090;
-  --od-text-4:        #656565;
-  --od-text-5:        #404040;
+  --od-text-1:        #f1f5f9;
+  --od-text-2:        #cbd5e1;
+  --od-text-3:        #94a3b8;
+  --od-text-4:        #64748b;
+  --od-text-5:        #475569;
 
   --od-border:        rgba(255, 255, 255, 0.08);
   --od-border-light:  rgba(255, 255, 255, 0.05);
 
-  --od-sidebar-bg:    #0e0c14;
+  --od-sidebar-bg:    #1e293b;
 }
 
 /* =============================================
-   Typography
+   Typography — Poppins + Nunito (ABCAA)
    ============================================= */
 
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
 .od-display {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
   letter-spacing: -0.5px;
 }
@@ -82,7 +89,7 @@
   font-weight: 600;
   letter-spacing: 0.7px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.28);
+  color: var(--od-text-4);
   padding: 16px 12px 4px;
 }
 
@@ -95,7 +102,7 @@
 .od-logo a {
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: var(--od-text-1);
   text-decoration: none;
   letter-spacing: -0.5px;
 }
@@ -110,16 +117,34 @@
 }
 
 .od-sidebar .q-item {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--od-text-3);
 }
 
 .od-sidebar .active-nav {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fff !important;
+  background: rgba(37, 99, 235, 0.12) !important;
+  color: var(--od-accent) !important;
 }
 
 .od-sidebar .active-nav .q-item__section--avatar {
   color: var(--od-accent) !important;
+}
+
+/* Dark mode sidebar overrides */
+.body--dark .od-logo a {
+  color: #f1f5f9;
+}
+
+.body--dark .od-sidebar .q-item {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.body--dark .od-sidebar .active-nav {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+.body--dark .od-section-label {
+  color: rgba(255, 255, 255, 0.28);
 }
 
 /* =============================================

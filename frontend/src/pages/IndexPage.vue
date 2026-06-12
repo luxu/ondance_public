@@ -9,11 +9,11 @@
         <div class="hero-text">
           <p class="hero-eyebrow">Plataforma oficial ABCAA</p>
           <h1 class="hero-headline">
-            Aprenda dança com os melhores professores do Brasil
+            Amor em Ação: Transformando Realidades
           </h1>
           <p class="hero-sub">
-            Cursos em vídeo para todos os níveis — do iniciante ao avançado.
-            No seu ritmo, onde quiser.
+            Cursos de dança para todos os níveis — do iniciante ao avançado.
+            Aprenda com os melhores professores e transforme sua vida através da arte.
           </p>
           <div class="hero-actions">
             <q-btn
@@ -259,12 +259,11 @@
 
     <footer class="landing-footer">
       <div class="section-container footer-container">
-        <div class="od-logo footer-logo">
-          <span class="od-logo-dot" />
-          <span>OnDance</span>
+        <div class="footer-logo">
+          <img src="/logo-abcaa.png" alt="ABCAA" style="height: 28px; width: auto;" />
         </div>
         <p class="footer-copy">
-          © {{ currentYear }} OnDance · ABCAA — Associação Beneficente e Cultural Amor em Ação
+          © {{ currentYear }} ABCAA — Associação Beneficente e Cultural Amor em Ação
         </p>
         <nav class="footer-nav">
           <a href="#" class="footer-link-item">Sobre</a>
@@ -416,9 +415,9 @@ const steps = [
 }
 
 /* ── Hero ── */
-.hero-section {
+  .hero-section {
   padding: 80px 0 64px;
-  background: linear-gradient(135deg, rgba(123, 94, 167, 0.06) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, transparent 60%);
 }
 
 .hero-container {
@@ -746,7 +745,7 @@ const steps = [
 .category-card:hover {
   border-color: var(--od-accent) !important;
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(123, 94, 167, 0.12);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
 }
 
 .category-emoji {
@@ -935,7 +934,7 @@ const steps = [
 
 .course-card:hover {
   border-color: var(--od-accent) !important;
-  box-shadow: 0 6px 20px rgba(123, 94, 167, 0.1);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
   transform: translateY(-2px);
 }
 
@@ -943,7 +942,7 @@ const steps = [
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: rgba(123, 94, 167, 0.1);
+  background: rgba(37, 99, 235, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;

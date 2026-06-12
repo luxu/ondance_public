@@ -1,11 +1,10 @@
 <template>
   <q-layout view="hHh Lpr lFf">
     <q-header class="main-header">
-      <q-toolbar class="main-toolbar">
+      <q-toolbar class="main-toolbar" style="font-family: 'Poppins', sans-serif;">
         <!-- Logo -->
-        <router-link to="/" class="od-logo navbar-logo">
-          <span class="od-logo-dot" />
-          <span>OnDance</span>
+        <router-link to="/" class="navbar-logo">
+          <img src="/logo-abcaa.png" alt="ABCAA" style="height: 36px; width: auto;" />
         </router-link>
 
         <div style="flex: 1;" />
@@ -74,7 +73,7 @@
     >
       <nav class="od-panel">
         <div class="od-panel-header">
-          <span class="od-panel-logo">OnDance</span>
+          <img src="/logo-abcaa.png" alt="ABCAA" style="height: 32px; width: auto;" />
           <button class="od-panel-close" @click="mobileDrawer = false" aria-label="Fechar menu">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
