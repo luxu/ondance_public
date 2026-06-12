@@ -55,6 +55,8 @@
       </router-view>
     </q-page-container>
 
+    <WelcomeModal />
+
   </q-layout>
 </template>
 
@@ -62,6 +64,7 @@
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppSidebar from 'components/shared/AppSidebar.vue'
+import WelcomeModal from 'components/shared/WelcomeModal.vue'
 import { useDarkMode } from 'src/composables/useDarkMode'
 import { useAuth } from 'src/composables/useAuth'
 

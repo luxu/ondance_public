@@ -67,11 +67,20 @@ const publicRoutes = {
   ]
 }
 
+const helpRoute = {
+  path: '/ajuda',
+  component: () => import('layouts/MainLayout.vue'),
+  children: [
+    { path: '', name: 'ajuda', component: () => import('pages/HelpPage.vue') }
+  ]
+}
+
 const routes = [
   studentRoutes,
   teacherRoutes,
   adminRoutes,
   publicRoutes,
+  helpRoute,
   profileRoute,
   { path: '/:catchAll(.*)*', name: '404', component: () => import('pages/ErrorNotFound.vue') }
 ]

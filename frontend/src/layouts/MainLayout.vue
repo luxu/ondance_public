@@ -13,6 +13,7 @@
         <!-- Desktop nav -->
         <nav class="desktop-nav">
           <router-link to="/courses/lista" class="nav-link">Cursos</router-link>
+          <router-link to="/ajuda" class="nav-link">Ajuda</router-link>
 
           <template v-if="isAuthenticated">
             <router-link to="/courses/initial" class="nav-link">Minha Área</router-link>
@@ -84,6 +85,9 @@
         <div class="od-panel-nav">
           <router-link to="/courses/lista" class="od-panel-link" @click="mobileDrawer = false">
             Cursos
+          </router-link>
+          <router-link to="/ajuda" class="od-panel-link" @click="mobileDrawer = false">
+            Ajuda
           </router-link>
 
           <template v-if="isAuthenticated">

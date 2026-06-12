@@ -42,6 +42,23 @@
       </template>
     </q-list>
 
+    <!-- Help link -->
+    <div class="q-px-md q-py-sm">
+      <q-item
+        clickable
+        v-ripple
+        to="/ajuda"
+        exact
+        style="border-radius: 8px; color: var(--od-text-3);"
+        class="q-mb-xs"
+      >
+        <q-item-section avatar style="min-width: 36px;">
+          <q-icon name="help_outline" size="18px" />
+        </q-item-section>
+        <q-item-section style="font-size: 13px;">Como usar</q-item-section>
+      </q-item>
+    </div>
+
     <!-- User pill -->
     <div class="q-mt-auto q-pa-sm">
       <div class="user-pill" @click="goToSettings">
