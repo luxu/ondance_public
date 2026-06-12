@@ -5,7 +5,7 @@
 
 /* === Light mode (default) — estilo ABCAA === */
 :root {
-  --od-accent:        #2563eb;
+  --od-accent:        #e91e8c;
 
   --od-bg-page:       #ffffff;
   --od-bg-surface:    #ffffff;
@@ -26,7 +26,7 @@
 
 /* === Dark mode — adaptado do ABCAA === */
 .body--dark {
-  --od-accent:        #3b82f6;
+  --od-accent:        #f472b6;
 
   --od-bg-page:       #0f172a;
   --od-bg-surface:    #1e293b;
@@ -121,7 +121,7 @@ body {
 }
 
 .od-sidebar .active-nav {
-  background: rgba(37, 99, 235, 0.12) !important;
+  background: rgba(233, 30, 140, 0.12) !important;
   color: var(--od-accent) !important;
 }
 
@@ -139,7 +139,7 @@ body {
 }
 
 .body--dark .od-sidebar .active-nav {
-  background: rgba(59, 130, 246, 0.15) !important;
+  background: rgba(244, 114, 182, 0.15) !important;
   color: #60a5fa !important;
 }
 

@@ -5,39 +5,66 @@
             "label": "Dev: Frontend",
             "type": "shell",
             "command": "powershell",
-            "args": ["-NoExit", "-Command", 
+            "args": [
+                "-NoExit",
+                "-Command",
                 "Write-Host 'PowerShell iniciado na pasta Frontend!' -ForegroundColor Green; Write-Host 'Iniciando o quasar...' -ForegroundColor Green; quasar dev"
             ],
-            "options": { "cwd": "${workspaceFolder}/frontend"},
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
             "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "dedicated", "group": "meu-grupo-dev", "focus": true}
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "meu-grupo-dev",
+                "focus": true
+            }
         },
         {
             "label": "Dev: Backend",
             "type": "shell",
             "command": "powershell",
-            "args": ["-NoExit", "-Command", 
-                "Write-Host 'Ativando ambiente virtual...' -ForegroundColor Cyan; .\\.venv\\Scripts\\Activate.ps1; Write-Host 'Iniciando o servidor...' -ForegroundColor Green; task server"
+            "args": [
+                "-NoExit",
+                "-Command",
+                "Write-Host 'Ativando ambiente virtual...' -ForegroundColor Cyan; .\\.venv\\Scripts\\Activate.ps1; Write-Host 'Iniciando o servidor...' -ForegroundColor Green; task runserver 8001"
             ],
-            "options": { "cwd": "${workspaceFolder}/backend"},
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
             "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "dedicated", "group": "meu-grupo-dev", "focus": true}
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "meu-grupo-dev",
+                "focus": true
+            }
         },
         {
             "label": "Abrir Terminal",
             "type": "shell",
             "command": "powershell",
-            "args": ["-NoExit", "-Command", 
+            "args": [
+                "-NoExit",
+                "-Command",
                 "Write-Host 'Iniciando o terminal para abrir o OPENCODE...' -ForegroundColor Green"
             ],
-            "options": { "cwd": "${workspaceFolder}"},
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
             "problemMatcher": [],
-            "presentation": { "reveal": "always", "panel": "dedicated", "group": "meu-grupo-dev", "focus": true}
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "group": "meu-grupo-dev",
+                "focus": true
+            }
         },
         {
             "label": "🚀 Iniciar Tudo Lado a Lado",
             "type": "shell",
-            "command": "echo 'Iniciando todos os serviços...'", // 👈 ADICIONE ISSO
+            "command": "echo 'Iniciando todos os serviços...'",
             "dependsOn": [
                 "Dev: Frontend",
                 "Dev: Backend",

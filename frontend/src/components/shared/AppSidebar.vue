@@ -167,8 +167,8 @@ defineExpose({ toggle: () => { drawerOpen.value = !drawerOpen.value } })
 }
 
 .role--aluno {
-  background: rgba(37, 99, 235, 0.12);
-  color: #2563eb;
+  background: rgba(233, 30, 140, 0.12);
+  color: #e91e8c;
 }
 
 .role--professor {

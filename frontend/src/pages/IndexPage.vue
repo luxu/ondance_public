@@ -417,7 +417,7 @@ const steps = [
 /* ── Hero ── */
   .hero-section {
   padding: 80px 0 64px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, transparent 60%);
+  background: linear-gradient(135deg, rgba(233, 30, 140, 0.06) 0%, transparent 60%);
 }
 
 .hero-container {
@@ -745,7 +745,7 @@ const steps = [
 .category-card:hover {
   border-color: var(--od-accent) !important;
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 8px 24px rgba(233, 30, 140, 0.12);
 }
 
 .category-emoji {
@@ -934,7 +934,7 @@ const steps = [
 
 .course-card:hover {
   border-color: var(--od-accent) !important;
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 6px 20px rgba(233, 30, 140, 0.1);
   transform: translateY(-2px);
 }
 
@@ -942,7 +942,7 @@ const steps = [
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(233, 30, 140, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
