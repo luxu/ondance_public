@@ -8,9 +8,14 @@ from user.models import Profile, User
 class Course(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, default='')
+    duration = models.CharField(max_length=50, blank=True, default='')
+    level = models.CharField(max_length=20, blank=True, default='')
+    emoji = models.CharField(max_length=10, blank=True, default='')
+    thumb_bg = models.CharField(max_length=7, blank=True, default='')
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_published = models.BooleanField(default=False)  # Só o Admin ou Professor mudam
-    status = models.CharField(max_length=20, default='PENDING')  # PENDING, APPROVED, REJECTED
+    is_published = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, default='PENDING')
 
     def __str__(self):
         return f"Curso de {self.title}"
@@ -19,6 +24,37 @@ class Course(models.Model):
         verbose_name = "Curso"
         verbose_name_plural = "Cursos"
         ordering = ['title']
+
+
+class Module(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='modules')
+    title = models.CharField(max_length=200)
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Módulo {self.order + 1}: {self.title}"
+
+    class Meta:
+        verbose_name = "Módulo"
+        verbose_name_plural = "Módulos"
+        ordering = ['order', 'title']
+
+
+class Lesson(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name='lessons')
+    title = models.CharField(max_length=200)
+    video_url = models.URLField(blank=True, default='')
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Aula {self.order + 1}: {self.title}"
+
+    class Meta:
+        verbose_name = "Aula"
+        verbose_name_plural = "Aulas"
+        ordering = ['order', 'title']
 
 
 class UserCourse(models.Model):
@@ -44,11 +80,11 @@ class Certificate(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='certificates')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     issue_date = models.DateField(auto_now_add=True)
-    code = models.CharField(max_length=100, unique=True)  # Código de validação
+    code = models.CharField(max_length=100, unique=True)
     file = models.FileField(upload_to='certificates/')
 
     def __str__(self):
-        return f"Certificado de {self.profile.user.name} — {self.course.title}"
+        return f"Certificado de {self.profile.name} — {self.course.title}"
 
     class Meta:
         verbose_name = "Certificado"

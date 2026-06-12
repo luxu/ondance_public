@@ -163,11 +163,11 @@ def test_profiles_retorna_campos_paginados(api_client, admin_user):
     assert {'count', 'returned', 'next', 'previous', 'results'}.issubset(resp.data.keys())
 
 
-def test_profiles_paginacao_limita_10_por_pagina(api_client, admin_user):
-    for i in range(15):
+def test_profiles_paginacao_limita_25_por_pagina(api_client, admin_user):
+    for i in range(30):
         u = User.objects.create_user(email=f'extra{i}@teste.com', password='senha123')
         Profile.objects.create(user=u, name=f'Extra {i}')
     api_client.force_authenticate(user=admin_user)
     resp = api_client.get(PROFILES_URL)
-    assert resp.data['returned'] <= 10
+    assert resp.data['returned'] <= 25
     assert resp.data['count'] >= 15

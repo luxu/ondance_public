@@ -53,7 +53,11 @@ def test_nao_retorna_cursos_em_rascunho(api_client, draft_course, teacher_profil
 def test_retorna_campos_do_curso(api_client, published_course, teacher_profile):
     resp = api_client.get(PUBLISHED_URL)
     curso = resp.json()['results'][0]
-    assert set(curso.keys()) == {'id', 'title', 'teacher', 'is_published', 'status'}
+    assert set(curso.keys()) == {
+        'id', 'title', 'description', 'duration', 'level',
+        'emoji', 'thumb_bg', 'teacher', 'is_published', 'status',
+        'modules_count', 'lessons_count',
+    }
 
 
 def test_teacher_e_objeto_com_campos_corretos(api_client, published_course, teacher_profile):

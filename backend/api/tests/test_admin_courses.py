@@ -70,7 +70,11 @@ def test_retorna_campos_corretos(api_client, admin_user, pending_course, teacher
     api_client.force_authenticate(user=admin_user)
     resp = api_client.get(ADMIN_URL)
     curso = resp.json()['results'][0]
-    assert set(curso.keys()) == {'id', 'title', 'teacher', 'status', 'is_published'}
+    assert set(curso.keys()) == {
+        'id', 'title', 'description', 'duration', 'level',
+        'emoji', 'thumb_bg', 'teacher', 'status', 'is_published',
+        'modules_count', 'lessons_count',
+    }
 
 
 def test_teacher_e_objeto_aninhado(api_client, admin_user, pending_course, teacher_profile):
@@ -169,7 +173,11 @@ def test_aprovar_curso_inexistente_retorna_404(api_client, admin_user):
 def test_aprovar_retorna_campos_corretos(api_client, admin_user, pending_course):
     api_client.force_authenticate(user=admin_user)
     resp = api_client.post(f'{ADMIN_URL}{pending_course.id}/approve/')
-    assert set(resp.json().keys()) == {'id', 'title', 'teacher', 'status', 'is_published'}
+    assert set(resp.json().keys()) == {
+        'id', 'title', 'description', 'duration', 'level',
+        'emoji', 'thumb_bg', 'teacher', 'status', 'is_published',
+        'modules_count', 'lessons_count',
+    }
 
 
 # ── Rejeitar ───────────────────────────────────────────────────────────────
@@ -219,4 +227,8 @@ def test_rejeitar_curso_inexistente_retorna_404(api_client, admin_user):
 def test_rejeitar_retorna_campos_corretos(api_client, admin_user, pending_course):
     api_client.force_authenticate(user=admin_user)
     resp = api_client.post(f'{ADMIN_URL}{pending_course.id}/reject/')
-    assert set(resp.json().keys()) == {'id', 'title', 'teacher', 'status', 'is_published'}
+    assert set(resp.json().keys()) == {
+        'id', 'title', 'description', 'duration', 'level',
+        'emoji', 'thumb_bg', 'teacher', 'status', 'is_published',
+        'modules_count', 'lessons_count',
+    }

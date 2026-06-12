@@ -308,7 +308,18 @@ onMounted(async () => {
   try {
     const { data } = await courseService.get(route.params.id)
     form.value.title = data.title
+    form.value.description = data.description || ''
+    form.value.duration = data.duration || ''
+    form.value.level = data.level || null
     courseStatus.value = data.status
+    modules.value = (data.modules || []).map((m) => ({
+      id: m.id,
+      title: m.title,
+      lessons: (m.lessons || []).map((l) => ({
+        id: l.id,
+        title: l.title,
+      })),
+    }))
   } catch (err) {
     if (err.response?.status === 404) {
       loadError.value = 'Curso não encontrado ou você não tem permissão para editá-lo.'
@@ -339,7 +350,22 @@ function removeLesson (mod, lIdx) {
 async function handleSubmit () {
   saving.value = true
   try {
-    await courseService.update(route.params.id, { title: form.value.title })
+    await courseService.update(route.params.id, {
+      title: form.value.title,
+      description: form.value.description,
+      duration: form.value.duration,
+      level: form.value.level,
+      modules: modules.value.map((m, idx) => ({
+        id: m.id || undefined,
+        title: m.title,
+        order: idx,
+        lessons: m.lessons.map((l, lidx) => ({
+          id: l.id || undefined,
+          title: l.title,
+          order: lidx,
+        })),
+      })),
+    })
     $q.notify({ type: 'positive', message: 'Curso atualizado com sucesso!', position: 'top', timeout: 2500 })
     router.push('/teacher/courses')
   } catch (err) {

@@ -66,7 +66,11 @@ def test_retorna_campos_corretos(api_client, teacher, published_course):
     api_client.force_authenticate(user=teacher)
     resp = api_client.get(MINE_URL)
     curso = resp.json()['results'][0]
-    assert set(curso.keys()) == {'id', 'title', 'teacher', 'is_published', 'status'}
+    assert set(curso.keys()) == {
+        'id', 'title', 'description', 'duration', 'level',
+        'emoji', 'thumb_bg', 'teacher', 'is_published', 'status',
+        'modules_count', 'lessons_count',
+    }
 
 
 def test_teacher_no_response_e_email(api_client, teacher, published_course):

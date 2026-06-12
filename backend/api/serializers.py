@@ -5,7 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from course.models import Course, UserCourse
+from course.models import Course, Lesson, Module, UserCourse
 from user.models import City, Profile, State, User
 
 
@@ -101,13 +101,73 @@ class CitySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'state']
 
 
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = ['id', 'title', 'video_url', 'order']
+
+
+class ModuleSerializer(serializers.ModelSerializer):
+    lessons = LessonSerializer(many=True, required=False)
+
+    class Meta:
+        model = Module
+        fields = ['id', 'title', 'order', 'lessons']
+
+    def create(self, validated_data):
+        lessons_data = validated_data.pop('lessons', [])
+        module = Module.objects.create(**validated_data)
+        for lesson_data in lessons_data:
+            Lesson.objects.create(module=module, **lesson_data)
+        return module
+
+    def update(self, instance, validated_data):
+        lessons_data = validated_data.pop('lessons', [])
+        instance.title = validated_data.get('title', instance.title)
+        instance.order = validated_data.get('order', instance.order)
+        instance.save()
+
+        existing_lessons = {str(les.id): les for les in instance.lessons.all()}
+        incoming_ids = set()
+
+        for lesson_data in lessons_data:
+            lesson_id = lesson_data.get('id')
+            if lesson_id and str(lesson_id) in existing_lessons:
+                lesson = existing_lessons[str(lesson_id)]
+                lesson.title = lesson_data.get('title', lesson.title)
+                lesson.video_url = lesson_data.get('video_url', lesson.video_url)
+                lesson.order = lesson_data.get('order', lesson.order)
+                lesson.save()
+                incoming_ids.add(str(lesson_id))
+            else:
+                Lesson.objects.create(module=instance, **lesson_data)
+
+        for lid, lesson in existing_lessons.items():
+            if lid not in incoming_ids:
+                lesson.delete()
+
+        return instance
+
+
 class CourseSerializer(serializers.ModelSerializer):
     teacher = serializers.SlugRelatedField(slug_field='email', read_only=True)
+    modules_count = serializers.SerializerMethodField()
+    lessons_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'teacher', 'is_published', 'status']
+        fields = [
+            'id', 'title', 'description', 'duration', 'level',
+            'emoji', 'thumb_bg', 'teacher', 'is_published', 'status',
+            'modules_count', 'lessons_count',
+        ]
         read_only_fields = ['id', 'teacher', 'is_published', 'status']
+
+    def get_modules_count(self, obj):
+        return obj.modules.count()
+
+    def get_lessons_count(self, obj):
+        return Lesson.objects.filter(module__course=obj).count()
 
 
 class TeacherDetailSerializer(serializers.ModelSerializer):
@@ -129,22 +189,122 @@ class TeacherDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'name', 'photo']
 
 
-class PublishedCourseSerializer(serializers.ModelSerializer):
+class CourseDetailSerializer(serializers.ModelSerializer):
     teacher = TeacherDetailSerializer(read_only=True)
+    modules = ModuleSerializer(many=True, required=False)
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'teacher', 'is_published', 'status']
+        fields = [
+            'id', 'title', 'description', 'duration', 'level',
+            'emoji', 'thumb_bg', 'teacher', 'is_published', 'status', 'modules',
+        ]
+        read_only_fields = ['id', 'teacher', 'is_published', 'status']
+
+    def create(self, validated_data):
+        modules_data = validated_data.pop('modules', [])
+        course = Course.objects.create(**validated_data)
+        for module_data in modules_data:
+            lessons_data = module_data.pop('lessons', [])
+            module = Module.objects.create(course=course, **module_data)
+            for lesson_data in lessons_data:
+                Lesson.objects.create(module=module, **lesson_data)
+        return course
+
+    def update(self, instance, validated_data):
+        modules_data = validated_data.pop('modules', [])
+
+        for attr in [
+            'title', 'description', 'duration', 'level', 'emoji', 'thumb_bg',
+        ]:
+            if attr in validated_data:
+                setattr(instance, attr, validated_data[attr])
+        instance.save()
+
+        existing_modules = {str(m.id): m for m in instance.modules.all()}
+        incoming_ids = set()
+
+        for module_data in modules_data:
+            module_id = module_data.get('id')
+            if module_id and str(module_id) in existing_modules:
+                module = existing_modules[str(module_id)]
+                module.title = module_data.get('title', module.title)
+                module.order = module_data.get('order', module.order)
+                module.save()
+
+                # Sync lessons inside this module
+                lessons_data = module_data.get('lessons', [])
+                existing_lessons = {str(les.id): les for les in module.lessons.all()}
+                lesson_incoming_ids = set()
+                for lesson_data in lessons_data:
+                    lesson_id = lesson_data.get('id')
+                    if lesson_id and str(lesson_id) in existing_lessons:
+                        lesson = existing_lessons[str(lesson_id)]
+                        lesson.title = lesson_data.get('title', lesson.title)
+                        lesson.video_url = lesson_data.get('video_url', lesson.video_url)
+                        lesson.order = lesson_data.get('order', lesson.order)
+                        lesson.save()
+                        lesson_incoming_ids.add(str(lesson_id))
+                    else:
+                        Lesson.objects.create(module=module, **lesson_data)
+                for lid, lesson in existing_lessons.items():
+                    if lid not in lesson_incoming_ids:
+                        lesson.delete()
+
+                incoming_ids.add(str(module_id))
+            else:
+                lessons_data = module_data.pop('lessons', [])
+                module = Module.objects.create(course=instance, **module_data)
+                for lesson_data in lessons_data:
+                    Lesson.objects.create(module=module, **lesson_data)
+
+        for mid, module in existing_modules.items():
+            if mid not in incoming_ids:
+                module.delete()
+
+        return instance
+
+
+class PublishedCourseSerializer(serializers.ModelSerializer):
+    teacher = TeacherDetailSerializer(read_only=True)
+    modules_count = serializers.SerializerMethodField()
+    lessons_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'title', 'description', 'duration', 'level',
+            'emoji', 'thumb_bg', 'teacher', 'is_published', 'status',
+            'modules_count', 'lessons_count',
+        ]
         read_only_fields = ['id', 'is_published', 'status']
+
+    def get_modules_count(self, obj):
+        return obj.modules.count()
+
+    def get_lessons_count(self, obj):
+        return Lesson.objects.filter(module__course=obj).count()
 
 
 class AdminCourseSerializer(serializers.ModelSerializer):
     teacher = TeacherDetailSerializer(read_only=True)
+    modules_count = serializers.SerializerMethodField()
+    lessons_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'teacher', 'status', 'is_published']
+        fields = [
+            'id', 'title', 'description', 'duration', 'level',
+            'emoji', 'thumb_bg', 'teacher', 'status', 'is_published',
+            'modules_count', 'lessons_count',
+        ]
         read_only_fields = ['id', 'title', 'teacher', 'is_published']
+
+    def get_modules_count(self, obj):
+        return obj.modules.count()
+
+    def get_lessons_count(self, obj):
+        return Lesson.objects.filter(module__course=obj).count()
 
 
 class TeacherStudentSerializer(serializers.ModelSerializer):
@@ -265,16 +425,4 @@ class GoogleSocialAuthSerializer(serializers.Serializer):
         return id_info
 
 
-# class ClientSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Client
-#         fields = (
-#             'id',
-#             'first_name',
-#             "last_name",
-#             "email",
-#             "national_registration",
-#             "cellphone",
-#             "phone",
-#             "active"
-#         )
+

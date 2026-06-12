@@ -1,7 +1,7 @@
 import pytest
 from django.db import IntegrityError
 
-from course.models import Certificate, Course
+from course.models import Certificate, Course, Lesson, Module
 
 pytestmark = pytest.mark.django_db
 
@@ -61,3 +61,44 @@ def test_code_duplicado_em_certificate_levanta_erro(certificate, student_profile
             code='CERT-2024-001',
             file='certificates/outro.pdf',
         )
+
+
+# ── Module ─────────────────────────────────────────────────────────────────
+
+
+def test_str_module_retorna_modulo_e_titulo(course):
+    module = Module.objects.create(course=course, title='Fundamentos', order=0)
+    assert str(module) == 'Módulo 1: Fundamentos'
+
+
+def test_module_referencia_course_correto(course):
+    module = Module.objects.create(course=course, title='A', order=0)
+    assert module.course == course
+
+
+def test_deletar_course_deleta_modules_em_cascata(course):
+    Module.objects.create(course=course, title='A', order=0)
+    course.delete()
+    assert Module.objects.count() == 0
+
+
+# ── Lesson ─────────────────────────────────────────────────────────────────
+
+
+def test_str_lesson_retorna_aula_e_titulo(course):
+    module = Module.objects.create(course=course, title='M', order=0)
+    lesson = Lesson.objects.create(module=module, title='Intro', order=0)
+    assert str(lesson) == 'Aula 1: Intro'
+
+
+def test_lesson_referencia_module_correto(course):
+    module = Module.objects.create(course=course, title='M', order=0)
+    lesson = Lesson.objects.create(module=module, title='L', order=0)
+    assert lesson.module == module
+
+
+def test_deletar_module_deleta_lessons_em_cascata(course):
+    module = Module.objects.create(course=course, title='M', order=0)
+    Lesson.objects.create(module=module, title='L', order=0)
+    module.delete()
+    assert Lesson.objects.count() == 0

@@ -18,7 +18,11 @@ def test_lista_courses_retorna_200(api_client, published_course):
 def test_lista_courses_retorna_campos_corretos(api_client, published_course):
     resp = api_client.get(COURSES_URL)
     primeiro = resp.json()['results'][0]
-    assert set(primeiro.keys()) == {'id', 'title', 'teacher', 'is_published', 'status'}
+    assert set(primeiro.keys()) == {
+        'id', 'title', 'description', 'duration', 'level',
+        'emoji', 'thumb_bg', 'teacher', 'is_published', 'status',
+        'modules_count', 'lessons_count',
+    }
 
 
 def test_lista_courses_em_ordem_alfabetica(api_client, teacher):
@@ -77,7 +81,7 @@ def test_cria_course_com_defaults(api_client, teacher):
     assert resp.status_code == 201
     body = resp.json()
     assert body['title'] == 'Contemporâneo'
-    assert body['teacher'] == teacher.email
+    assert body['teacher']['email'] == teacher.email
     assert body['is_published'] is False
     assert body['status'] == 'PENDING'
 

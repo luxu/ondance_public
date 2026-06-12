@@ -12,6 +12,7 @@ from api.serializers import (
     AdminCourseSerializer,
     AdminUserSerializer,
     CitySerializer,
+    CourseDetailSerializer,
     TeacherStudentSerializer,
     CourseSerializer,
     GoogleSocialAuthSerializer,
@@ -24,13 +25,6 @@ from api.serializers import (
 from api.throttles import RegisterThrottle, SocialAuthThrottle
 from course.models import Course, UserCourse
 from user.models import City, Profile, State, User
-
-
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-users = UserList.as_view()
 
 
 class UserCreate(generics.CreateAPIView):
@@ -80,7 +74,11 @@ states = StateList.as_view()
 
 
 class CourseListCreate(generics.ListCreateAPIView):
-    serializer_class = CourseSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CourseDetailSerializer
+        return CourseSerializer
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -108,6 +106,7 @@ class PublishedCourseList(generics.ListAPIView):
         return (
             Course.objects
             .select_related('teacher__profile')
+            .prefetch_related('modules')
             .filter(is_published=True)
             .order_by('title')
         )
@@ -133,11 +132,16 @@ teacher_courses = TeacherCourseList.as_view()
 
 
 class CourseDetail(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = CourseSerializer
+    serializer_class = CourseDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Course.objects.select_related('teacher').filter(teacher=self.request.user)
+        return (
+            Course.objects
+            .select_related('teacher')
+            .prefetch_related('modules__lessons')
+            .filter(teacher=self.request.user)
+        )
 
 
 course_detail = CourseDetail.as_view()

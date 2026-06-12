@@ -312,15 +312,49 @@ function removeLesson (mod, lIdx) {
   mod.lessons.splice(lIdx, 1)
 }
 
-function saveDraft () {
-  console.log('rascunho:', { ...form.value, modules: modules.value })
-  // TODO: integrar com API
+async function saveDraft () {
+  try {
+    await courseService.create({
+      title: form.value.title,
+      description: form.value.description,
+      duration: form.value.duration,
+      level: form.value.level,
+      modules: modules.value.map((m, idx) => ({
+        title: m.title,
+        order: idx,
+        lessons: m.lessons.map((l, lidx) => ({
+          title: l.title,
+          order: lidx,
+        })),
+      })),
+    })
+    $q.notify({ type: 'positive', message: 'Rascunho salvo com sucesso!', position: 'top', timeout: 2500 })
+    router.push('/teacher/courses')
+  } catch (err) {
+    const msg = err.response?.data
+      ? Object.values(err.response.data).flat().join(' ')
+      : 'Erro ao salvar rascunho. Tente novamente.'
+    $q.notify({ type: 'negative', message: msg, position: 'top', timeout: 3000 })
+  }
 }
 
 async function handleSubmit () {
   saving.value = true
   try {
-    await courseService.create({ title: form.value.title })
+    await courseService.create({
+      title: form.value.title,
+      description: form.value.description,
+      duration: form.value.duration,
+      level: form.value.level,
+      modules: modules.value.map((m, idx) => ({
+        title: m.title,
+        order: idx,
+        lessons: m.lessons.map((l, lidx) => ({
+          title: l.title,
+          order: lidx,
+        })),
+      })),
+    })
     $q.notify({ type: 'positive', message: 'Curso publicado com sucesso!', position: 'top', timeout: 2500 })
     router.push('/teacher/courses')
   } catch (err) {

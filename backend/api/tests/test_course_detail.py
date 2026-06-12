@@ -35,7 +35,10 @@ def test_get_dono_recebe_200(api_client, teacher, published_course):
 def test_get_retorna_campos_corretos(api_client, teacher, published_course):
     api_client.force_authenticate(user=teacher)
     resp = api_client.get(DETAIL_URL.format(published_course.id))
-    assert set(resp.json().keys()) == {'id', 'title', 'teacher', 'is_published', 'status'}
+    assert set(resp.json().keys()) == {
+        'id', 'title', 'description', 'duration', 'level',
+        'emoji', 'thumb_bg', 'teacher', 'is_published', 'status', 'modules',
+    }
 
 
 def test_get_retorna_dados_do_curso(api_client, teacher, published_course):
@@ -43,7 +46,7 @@ def test_get_retorna_dados_do_curso(api_client, teacher, published_course):
     resp = api_client.get(DETAIL_URL.format(published_course.id))
     body = resp.json()
     assert body['title'] == published_course.title
-    assert body['teacher'] == teacher.email
+    assert body['teacher']['email'] == teacher.email
 
 
 def test_get_curso_de_outro_professor_retorna_404(api_client, teacher, other_course):
@@ -122,7 +125,7 @@ def test_put_nao_altera_teacher_nem_status(api_client, teacher, published_course
     body = resp.json()
     assert body['status'] == 'PENDING'
     assert body['is_published'] is True  # is_published permanece inalterado (read_only)
-    assert body['teacher'] == teacher.email
+    assert body['teacher']['email'] == teacher.email
 
 
 # ── PATCH (partial update) ─────────────────────────────────────────────────

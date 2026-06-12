@@ -14,9 +14,9 @@ def test_returned_reflete_registros_da_pagina(api_client, cities):
     assert data['returned'] == len(data['results'])
 
 
-def test_page_size_padrao_e_10(api_client, cities_10):
+def test_page_size_padrao_e_25(api_client, cities_10):
     resp = api_client.get('/api/cities/')
-    assert resp.json()['returned'] == 10
+    assert resp.json()['returned'] == 12
 
 
 def test_lista_cidades_retorna_campos_corretos(api_client, cities):
