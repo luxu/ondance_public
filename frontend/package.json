@@ -2,7 +2,7 @@
   "name": "quasar-project",
   "version": "0.0.1",
   "description": "Plataforma online de dança",
-  "productName": "OnDance",
+  "productName": "OnDance - Plataforma online de dança",
   "author": "Luciano Martins <zicadopv@gmail.com>",
   "type": "module",
   "private": true,
